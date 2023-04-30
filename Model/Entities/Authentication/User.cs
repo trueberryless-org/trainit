@@ -1,4 +1,6 @@
-﻿namespace Model.Entities.Authentication;
+﻿using Model.Entities.per_User;
+
+namespace Model.Entities.Authentication;
 
 [Table("USERS")]
 public class User {
@@ -26,6 +28,9 @@ public class User {
     public string LoginPassword { get; set; } = null!;
     
     public List<RoleClaim> RoleClaims { get; set; }
+    
+    public List<Exercise> Exercises { get; set; }
+    public List<Workout> Workouts { get; set; }
 
     [NotMapped] 
     public IEnumerable<string> PlainRoles => RoleClaims.Select(x => x.Role.Identifier);

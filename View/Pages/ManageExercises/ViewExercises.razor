@@ -1,0 +1,70 @@
+﻿@page "/viewexercises"
+
+<PageTitle>Exercise View</PageTitle>
+
+<AuthorizeView>
+    <Authorized>
+        <MudContainer Class="mt-8">
+
+            <MudStack Spacing="8">
+                <h1 class="ms-4">Exercises</h1>
+                <MudDivider/>
+            </MudStack>
+
+            <DataInit Data="Exercises">
+                <ChildContent Context="exercises">
+                    <MudList Clickable="true">
+                        @foreach (var exercise in exercises)
+                        {
+                            <MudListItem>
+                                <MudGrid Style="min-height: 4rem;">
+                                    <MudItem xs="10" Style="display: flex; align-items: center;">
+                                        @exercise.Name
+                                    </MudItem>
+                                    <MudItem xs="2">
+                                        <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="() => EditExercise(exercise.Id)"/>
+                                    </MudItem>
+                                </MudGrid>
+
+                            </MudListItem>
+                        }
+                    </MudList>
+                </ChildContent>
+            </DataInit>
+
+        </MudContainer>
+
+        <div Style="position: fixed; bottom: 13vh; right: 2vh;">
+            <MudFab Color="Color.Info" StartIcon="@Icons.Material.Filled.Add" OnClick="NewExercise"/>
+        </div>
+
+    </Authorized>
+</AuthorizeView>
+
+
+@code {
+
+    [Inject]
+    private IDialogService DialogService { get; set; }
+
+    List<Exercise> Exercises { get; set; } = null!;
+
+    void EditExercise(int exerciseId)
+    {
+        NavigationManager.NavigateTo($"{NavigationProvider["EditExercise"].Link}/{exerciseId}");
+    }
+
+    async Task NewExercise()
+    {
+        NavigationManager.NavigateTo(NavigationProvider["NewExercise"].Link);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (await UserService.IsAuthenticated())
+        {
+            Exercises = await ExerciseRepository.GetExercisesByUser(UserService.CurrentUser!.Id);
+        }
+    }
+
+}

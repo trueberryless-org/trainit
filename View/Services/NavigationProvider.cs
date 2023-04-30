@@ -65,176 +65,98 @@ public class NavigationProvider
 
             // Add pages here (everything else is automatic) #https://mudblazor.com/features/icons#icons
             {
-                "Home",
+                "ViewActivities",
                 new Page()
                 {
-                    Name = "Home",
-                    Link = "/",
+                    Name = "Activities",
+                    Link = "/viewactivities",
                     Type = PageType.CONTENT,
-                    Icon = Icons.Material.Filled.Home,
+                    Icon = Icons.Material.Filled.CalendarToday,
                     Priority = PagePriority.IMPORTANT
                 }
             },
             {
-                "Verified",
+                "EditActivity",
                 new Page()
                 {
-                    Name = "Verified",
-                    Link = "/Verified",
-                    Type = PageType.CONTENT,
-                    Icon = Icons.Material.Filled.Verified
+                    Name = "Edit Activity",
+                    Link = "/editactivity",
+                    Type = PageType.CONTENT_NO_NAVBAR,
+                    Icon = Icons.Material.Filled.CalendarToday
                 }
             },
             {
-                "Games",
+                "NewActivity",
                 new Page()
                 {
-                    Name = "Games",
-                    Link = "/Games",
+                    Name = "New Activity",
+                    Link = "/newactivity",
+                    Type = PageType.CONTENT_NO_NAVBAR,
+                    Icon = Icons.Material.Filled.CalendarToday
+                }
+            },
+            
+            {
+                "ViewExercises",
+                new Page()
+                {
+                    Name = "Exercises",
+                    Link = "/viewexercises",
                     Type = PageType.CONTENT,
-                    Icon = Icons.Material.Filled.Games,
+                    Icon = Icons.Material.Filled.FitnessCenter,
                     Priority = PagePriority.IMPORTANT
                 }
             },
             {
-                "Tag",
+                "EditExercise",
                 new Page()
                 {
-                    Name = "Tag",
-                    Link = "/Tag",
+                    Name = "Edit Exercise",
+                    Link = "/editexercise",
+                    Type = PageType.CONTENT_NO_NAVBAR,
+                    Icon = Icons.Material.Filled.FitnessCenter
+                }
+            },
+            {
+                "NewExercise",
+                new Page()
+                {
+                    Name = "New Exercise",
+                    Link = "/newexercise",
+                    Type = PageType.CONTENT_NO_NAVBAR,
+                    Icon = Icons.Material.Filled.FitnessCenter
+                }
+            },
+            
+            {
+                "ViewWorkouts",
+                new Page()
+                {
+                    Name = "Workouts",
+                    Link = "/viewworkouts",
                     Type = PageType.CONTENT,
-                    Icon = Icons.Material.Filled.Tag,
+                    Icon = Icons.Material.Filled.List,
                     Priority = PagePriority.IMPORTANT
                 }
             },
             {
-                "Vignette",
+                "EditWorkout",
                 new Page()
                 {
-                    Name = "Vignette",
-                    Link = "/Vignette",
-                    Type = PageType.CONTENT,
-                    Icon = Icons.Material.Filled.Vignette
+                    Name = "Edit Workout",
+                    Link = "/editworkout",
+                    Type = PageType.CONTENT_NO_NAVBAR,
+                    Icon = Icons.Material.Filled.List
                 }
             },
             {
-                "Receipt",
+                "NewWorkout",
                 new Page()
                 {
-                    Name = "Receipt",
-                    Link = "/Receipt",
-                    Type = PageType.CONTENT,
-                    Icon = Icons.Material.Filled.Receipt
-                }
-            },
-            {
-                "Mail",
-                new Page()
-                {
-                    Name = "Mail",
-                    Link = "/Mail",
-                    Type = PageType.CONTENT,
-                    Icon = Icons.Material.Filled.Mail
-                }
-            },
-            {
-                "Backspace",
-                new Page()
-                {
-                    Name = "Backspace",
-                    Link = "/Backspace",
-                    Type = PageType.CONTENT,
-                    Icon = Icons.Material.Filled.Backspace
-                }
-            },
-            {
-                "Edit",
-                new Page()
-                {
-                    Name = "Edit",
-                    Link = "/Edit",
-                    Type = PageType.CONTENT,
-                    Icon = Icons.Material.Filled.Edit
-                }
-            },
-            {
-                "Factory",
-                new Page()
-                {
-                    Name = "Factory",
-                    Link = "/Factory",
-                    Type = PageType.CONTENT,
-                    Icon = Icons.Material.Filled.Factory
-                }
-            },
-            {
-                "Mediation",
-                new Page()
-                {
-                    Name = "Mediation",
-                    Link = "/Mediation",
-                    Type = PageType.CONTENT,
-                    Icon = Icons.Material.Filled.Mediation
-                }
-            },
-            {
-                "Nature",
-                new Page()
-                {
-                    Name = "Nature",
-                    Link = "/Nature",
-                    Type = PageType.CONTENT,
-                    Icon = Icons.Material.Filled.Nature
-                }
-            },
-            {
-                "Landscape",
-                new Page()
-                {
-                    Name = "Landscape",
-                    Link = "/Landscape",
-                    Type = PageType.CONTENT,
-                    Icon = Icons.Material.Filled.Landscape
-                }
-            },
-            {
-                "Tab",
-                new Page()
-                {
-                    Name = "Tab",
-                    Link = "/Tab",
-                    Type = PageType.CONTENT,
-                    Icon = Icons.Material.Filled.Tab
-                }
-            },
-            {
-                "Panorama",
-                new Page()
-                {
-                    Name = "Panorama",
-                    Link = "/Panorama",
-                    Type = PageType.CONTENT,
-                    Icon = Icons.Material.Filled.Panorama
-                }
-            },
-            {
-                "Elevator",
-                new Page()
-                {
-                    Name = "Elevator",
-                    Link = "/Elevator",
-                    Type = PageType.CONTENT,
-                    Icon = Icons.Material.Filled.Elevator
-                }
-            },
-            {
-                "Water",
-                new Page()
-                {
-                    Name = "Water",
-                    Link = "/Water",
-                    Type = PageType.CONTENT,
-                    Icon = Icons.Material.Filled.Water
+                    Name = "New Workout",
+                    Link = "/newworkout",
+                    Type = PageType.CONTENT_NO_NAVBAR,
+                    Icon = Icons.Material.Filled.List
                 }
             },
         };
@@ -468,6 +390,7 @@ public enum PageType
 {
     AUTHENTICATION,
     CONTENT,
+    CONTENT_NO_NAVBAR,
     FOOTER,
     RELATED,
     SERVICE,

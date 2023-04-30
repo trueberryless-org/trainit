@@ -1,0 +1,117 @@
+﻿@page "/newexercise"
+
+<PageTitle>New Exercise</PageTitle>
+
+<AuthorizeView>
+    <Authorized>
+        <MudContainer Class="mt-8">
+            <MudStack Spacing="4">
+                <h1 class="ms-4 mb-12">Create Exercise</h1>
+                <MudForm>
+                    <DataInit Data="Exercise">
+                        <ChildContent Context="exercise">
+                            <MudStack Spacing="4">
+                                <MudPaper class="pa-4" Elevation="3">
+                                    <MudTextField @bind-Value="exercise.Name" Label="Name" Variant="Variant.Outlined"
+                                                  Adornment="Adornment.Start" AdornmentIcon="@Icons.Filled.TextFormat" AdornmentColor="Color.Secondary"
+                                                  Counter="100" MaxLength="100"
+                                                  Immediate="true"/>
+                                </MudPaper>
+                                <MudPaper class="pa-4" Elevation="3">
+                                    <MudTextField @bind-Value="exercise.MachineAsset.Name" Label="Machine" Variant="Variant.Outlined"
+                                                  Adornment="Adornment.Start" AdornmentIcon="@Icons.Filled.FitnessCenter" AdornmentColor="Color.Secondary"
+                                                  Counter="100" MaxLength="100"
+                                                  Immediate="true"/>
+                                </MudPaper>
+                                <MudPaper class="pa-4" Elevation="3">
+                                    <MudTextField @bind-Value="exercise.Description" Label="Description" Variant="Variant.Outlined"
+                                                  Adornment="Adornment.Start" AdornmentIcon="@Icons.Filled.Description" AdornmentColor="Color.Secondary"
+                                                  Immediate="true"
+                                                  Lines="5"/>
+                                </MudPaper>
+                            </MudStack>
+                        </ChildContent>
+                    </DataInit>
+                </MudForm>
+
+                <h2 class="ms-0 mb-5 mt-10">Workouts where Exercise is in:</h2>
+                <DataInit Data="Workouts">
+                    <ChildContent Context="workouts">
+                        <MudStack Spacing="4">
+                            <MudPaper class="pa-4" Elevation="3">
+                                <MudList Clickable="true">
+                                    @foreach (var workout in workouts)
+                                    {
+                                        <MudListItem>
+                                            <MudGrid Style="min-height: 4rem;">
+                                                <MudItem xs="10" Style="display: flex; align-items: center;">
+                                                    <MudCheckBox Color="Color.Primary" Label="@workout.Name" @bind-Checked="@workout.IsSelected" Style="min-width: 50%"></MudCheckBox>
+                                                </MudItem>
+                                            </MudGrid>
+                                        </MudListItem>
+                                    }
+                                </MudList>
+                            </MudPaper>
+                        </MudStack>
+                    </ChildContent>
+                </DataInit>
+            </MudStack>
+        </MudContainer>
+
+        <div Style="position: fixed; bottom: 13vh; right: 2vh; display: grid; gap: 1rem;">
+            <MudFab Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.Check" OnClick="CreateExercise"/>
+        </div>
+    </Authorized>
+</AuthorizeView>
+
+
+@code {
+
+    [Inject]
+    private IDialogService DialogService { get; set; }
+
+    Exercise? Exercise { get; set; } = new Exercise();
+
+    [Parameter]
+    public int? ExerciseId { get; set; }
+
+    List<Workout> Workouts { get; set; }
+
+    List<Workout> SelectedWorkouts { get; set; }
+
+    async Task CreateExercise()
+    {
+        if (String.IsNullOrEmpty(Exercise.Name))
+        {
+            Snackbar.Add($"Exercise must have a name!", Severity.Warning);
+            return;
+        }
+        
+        Workouts = Workouts.Where(e => e.IsSelected == true).ToList();
+        Exercise.User = UserService.CurrentUser!;
+        Exercise.UserId = UserService.CurrentUser!.Id;
+        await ExerciseRepository.CreateAsync(Exercise);
+        var workoutExercises = Workouts.Select(workout => new WorkoutExercise() { Exercise = Exercise, Workout = workout }).ToList();
+        await WorkoutExerciseRepository.CreateAsync(workoutExercises);
+
+        NavigationManager.NavigateTo(NavigationProvider["ViewExercises"].Link);
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!await UserService.IsAuthenticated()) return;
+
+        Workouts = await WorkoutRepository.GetWorkoutsByUser(UserService.CurrentUser!.Id);
+        Workouts.ForEach(e => e.IsSelected = false);
+
+        var selectedExercisesId = (await WorkoutExerciseRepository.ReadAsync(we => we.Exercise == Exercise)).Select(we => we.WorkoutId);
+        SelectedWorkouts = await WorkoutRepository.ReadAsync(w => selectedExercisesId.Contains(w.Id));
+
+        foreach (var workout in Workouts.Where(e => selectedExercisesId.Contains(e.Id)))
+        {
+            workout.IsSelected = true;
+        }
+    }
+
+}

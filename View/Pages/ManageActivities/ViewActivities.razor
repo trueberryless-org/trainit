@@ -1,0 +1,112 @@
+﻿@page "/viewactivities"
+@using Activity = Model.Entities.per_User.Activity
+
+<PageTitle>Activity View</PageTitle>
+
+<AuthorizeView>
+    <Authorized>
+        <MudContainer Class="mt-8">
+            <MudStack Spacing="8">
+                <h1 class="ms-4">Activities</h1>
+
+                <MudCardActions>
+                    <MudIconButton OnClick="DateManager.PrevDate" Icon="@Icons.Material.Filled.ArrowBackIos" aria-label="previous day"></MudIconButton>
+                    <MudDatePicker Label="Choose date" @ref="DateManager.DatePicker" @bind-Date="DateManager.SelectedDate" AutoClose="true" MaxDate="DateManager.Today" class="mx-4">
+                        <PickerActions Context="_">
+                            <MudButton Class="mr-auto align-self-start" OnClick="DateManager.DatePickerToday">Today</MudButton>
+                        </PickerActions>
+                    </MudDatePicker>
+                    <MudIconButton OnClick="DateManager.NextDate" Icon="@Icons.Material.Filled.ArrowForwardIos" Disabled="DateManager.MaxDateReached" aria-label="next day"></MudIconButton>
+                </MudCardActions>
+                <MudDivider/>
+            </MudStack>
+
+            <DataInit Data="Activities">
+                <ChildContent Context="activities">
+                    <MudList Clickable="true">
+                        @foreach (var activity in activities)
+                        {
+                            <MudListItem>
+                                <MudGrid Style="min-height: 4rem;">
+                                    <MudItem xs="7" Style="display: flex; align-items: center;">
+                                        @activity.Exercise.Name
+                                    </MudItem>
+                                    <MudItem xs="3" Style="text-align: end; display: flex; align-items: center;">
+                                        @Math.Round(activity.Weight, 2) kg
+                                    </MudItem>
+                                    <MudItem xs="2" Style="display: flex; align-items: center;">
+                                        <MudIconButton Icon="@Icons.Filled.Edit" OnClick="() => EditActivity(activity.Id)"/>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudListItem>
+                        }
+                    </MudList>
+
+                    <div Style="position: fixed; bottom: 13vh; right: 2vh; display: grid; gap: 1rem;">
+                        <MudFab Color="Color.Info" StartIcon="@Icons.Material.Filled.Add" OnClick="NewActivity"/>
+                    </div>
+                    
+                </ChildContent>
+            </DataInit>
+            
+        </MudContainer>
+    </Authorized>
+    <NotAuthorized>
+        <MudContainer Class="mt-8">
+            <MudStack Spacing="4">
+                <h1 class="ms-4 mb-12">You are not logged in!</h1>
+                
+                <MudPaper class="pa-4" Elevation="3">
+                    <div>Please click <a href="@NavigationProvider["Login"].Link" style="color: yellow;">here</a> in order to get redirected to the Log In site!</div>
+                </MudPaper>
+                
+            </MudStack>
+        </MudContainer>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+
+    [Inject]
+    private IDialogService DialogService { get; set; }
+
+    List<Activity> Activities { get; set; } = null!;
+
+    private async Task ReloadActivities(object? sender, EventArgs e)
+    {
+        try
+        {
+            if (DateManager.SelectedDate == null) return;
+            Activities = await ActivityRepository.GetActivitiesByUserByDate(UserService.CurrentUser!.Id, DateOnly.FromDateTime(DateManager.SelectedDate ?? DateTime.Today));
+            StateHasChanged();
+        }
+        catch (Exception exception)
+        {
+            Console.WriteLine(exception);
+        }
+    }
+    
+    async Task EditActivity(int activityId)
+    {
+        NavigationManager.NavigateTo($"{NavigationProvider["EditActivity"].Link}/{activityId}");
+    }
+
+    private void NewActivity()
+    {
+        NavigationManager.NavigateTo(NavigationProvider["NewActivity"].Link);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (await UserService.IsAuthenticated())
+        {
+            Activities = await ActivityRepository.GetActivitiesByUserByDate(UserService.CurrentUser!.Id, DateOnly.FromDateTime(DateManager.SelectedDate ?? DateTime.Today));
+        }
+
+        EventProvider.SelectedDateChanged += new EventHandler(async (s, e) => await ReloadActivities(s, e));
+        
+        // sometimes buggy
+        if(DateManager.MaxDateReached) StateHasChanged();
+    }
+
+}

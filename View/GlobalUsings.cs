@@ -21,6 +21,8 @@ global using Model.Configuration;
 global using Model.Entities;
 global using Model.Entities.Authentication;
 global using Model.Entities.Log;
+global using Model.Entities.per_User;
+global using Model.Entities.Authentication.Models;
 
 global using View;
 global using View.Services;

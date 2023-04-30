@@ -49,6 +49,18 @@ builder.Services.AddScoped<IRoleClaimRepository, RoleClaimRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
+builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
+builder.Services.AddScoped<IExerciseAssetMuscleAssetRepository, ExerciseAssetMuscleAssetRepository>();
+builder.Services.AddScoped<IExerciseAssetRepository, ExerciseAssetRepository>();
+builder.Services.AddScoped<IExerciseMuscleAssetRepository, ExerciseMuscleAssetRepository>();
+builder.Services.AddScoped<IExerciseRepository, ExerciseRepository>();
+builder.Services.AddScoped<IMachineAssetRepository, MachineAssetRepository>();
+builder.Services.AddScoped<IMuscleAssetRepository, MuscleAssetRepository>();
+builder.Services.AddScoped<IWorkoutAssetExerciseAssetRepository, WorkoutAssetExerciseAssetRepository>();
+builder.Services.AddScoped<IWorkoutAssetRepository, WorkoutAssetRepository>();
+builder.Services.AddScoped<IWorkoutExerciseRepository, WorkoutExerciseRepository>();
+builder.Services.AddScoped<IWorkoutRepository, WorkoutRepository>();
+
 builder.Services.AddScoped<IThemeHandler, ThemeHandler>();
 builder.Services.AddScoped<CircuitHandler, CircuitTracker>();
 
@@ -82,10 +94,7 @@ using (var scope = app.Services.CreateScope())
 
     var context = services.GetRequiredService<ModelDbContext>();
 
-    if (context.Database.GetPendingMigrations().Any())
-    {
-        context.Database.Migrate();
-    }
+    context.Database.EnsureCreated();
 }
 
 app.UseHttpsRedirection();

@@ -1,0 +1,312 @@
+﻿@page "/newactivity"
+@using Activity = Model.Entities.per_User.Activity
+
+<PageTitle>New Activity</PageTitle>
+
+<AuthorizeView>
+    <Authorized>
+        <MudContainer Class="mt-8">
+            <MudStack Spacing="4">
+                <h1 class="ms-4 mb-12">New Activity</h1>
+
+                <MudForm>
+                    <MudStack Spacing="4">
+                        <MudPaper class="pa-4" Elevation="3">
+                            <MudText>Type of Creation:</MudText>
+                            <MudRadioGroup @bind-SelectedOption="@SelectedTypeOfAddition">
+                                <MudRadio Option="@(AdditionType.ONE)" Color="Color.Primary">Add 1 Activity!</MudRadio>
+                                <MudRadio Option="@(AdditionType.MULTIPLE)" Color="Color.Secondary">Add multiple Activities!</MudRadio>
+                                <MudRadio Option="@(AdditionType.WORKOUT)" Color="Color.Tertiary">Add all Activities from Workout!</MudRadio>
+                            </MudRadioGroup>
+                        </MudPaper>
+
+                        @switch (SelectedTypeOfAddition)
+                        {
+                            case AdditionType.ONE:
+                                <MudPaper class="pa-4" Elevation="3">
+                                    <DataInit Data="Exercises">
+                                        <ChildContent Context="exercises">
+                                            <MudSelect T="Exercise" @bind-value="SelectedExercise" Label="Exercise" ToStringFunc="@GetExerciseName" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+                                                @foreach (var exercise in exercises)
+                                                {
+                                                    <MudSelectItem Value="@exercise"/>
+                                                }
+                                            </MudSelect>
+                                        </ChildContent>
+                                    </DataInit>
+                                </MudPaper>
+
+                                @if (SelectedExercise != null)
+                                {
+                                    <MudPaper class="pa-4" Elevation="3">
+                                        <DataInit Data="Activity">
+                                            <ChildContent Context="activity">
+                                                <MudStack Spacing="3">
+                                                    <MudTextField @bind-Value="activity.Weight" Label="Weight" Variant="Variant.Outlined"
+                                                                  Adornment="Adornment.Start" AdornmentIcon="@Icons.Filled.MonitorWeight" AdornmentColor="Color.Secondary"
+                                                                  InputMode="InputMode.numeric" InputType="InputType.Text"
+                                                                  Immediate="true"/>
+                                                    <MudTextField @bind-Value="activity.Set" Label="Set" Variant="Variant.Outlined"
+                                                                  Adornment="Adornment.Start" AdornmentIcon="@Icons.Filled.MonitorWeight" AdornmentColor="Color.Secondary"
+                                                                  InputMode="InputMode.numeric" InputType="InputType.Text"
+                                                                  Immediate="true"/>
+                                                    <MudTextField @bind-Value="activity.Repetition" Label="Repetition" Variant="Variant.Outlined"
+                                                                  Adornment="Adornment.Start" AdornmentIcon="@Icons.Filled.MonitorWeight" AdornmentColor="Color.Secondary"
+                                                                  InputMode="InputMode.numeric" InputType="InputType.Text"
+                                                                  Immediate="true"/>
+                                                </MudStack>
+                                            </ChildContent>
+                                        </DataInit>
+                                    </MudPaper>
+                                }
+
+                                break;
+
+                            case AdditionType.MULTIPLE:
+                                <DataInit Data="Exercises">
+                                    <ChildContent Context="exercises">
+                                        <MudList Clickable="true">
+                                            @foreach (var exercise in exercises)
+                                            {
+                                                <MudListItem>
+                                                    <MudGrid Style="min-height: 4rem;">
+                                                        <MudItem xs="10" Style="display: flex; align-items: center;">
+                                                            <MudCheckBox Color="Color.Primary" Label="@exercise.Name" @bind-Checked="@exercise.IsSelected" Style="min-width: 50%"></MudCheckBox>
+                                                        </MudItem>
+                                                        <MudItem xs="2">
+                                                            <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="() => EditExercise(exercise.Id)"/>
+                                                        </MudItem>
+                                                    </MudGrid>
+
+                                                </MudListItem>
+                                            }
+                                        </MudList>
+                                    </ChildContent>
+                                </DataInit>
+
+                                break;
+
+                            case AdditionType.WORKOUT:
+                                <MudPaper class="pa-4" Elevation="3">
+                                    <DataInit Data="Workouts">
+                                        <ChildContent Context="workouts">
+                                            <MudSelect T="Workout" @bind-value="SelectedWorkout" Label="Workout" ToStringFunc="@GetWorkoutName" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+                                                @foreach (var workout in workouts)
+                                                {
+                                                    <MudSelectItem Value="@workout"/>
+                                                }
+                                            </MudSelect>
+                                        </ChildContent>
+                                    </DataInit>
+                                </MudPaper>
+
+                                break;
+
+                            default:
+                                <MudText>Please select an option above!</MudText>
+
+                                break;
+                        }
+                    </MudStack>
+                </MudForm>
+            </MudStack>
+        </MudContainer>
+
+        <div Style="position: fixed; bottom: 13vh; right: 2vh; display: grid; gap: 1rem;">
+            <MudFab Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.Check" OnClick="SaveNewActivity"/>
+        </div>
+
+    </Authorized>
+</AuthorizeView>
+
+
+@code {
+    AdditionType? _selectedTypeOfAddition = AdditionType.ONE;
+
+    AdditionType SelectedTypeOfAddition
+    {
+        get => _selectedTypeOfAddition ??= AdditionType.ONE;
+        set
+        {
+            if (_selectedTypeOfAddition == value) return;
+            _selectedTypeOfAddition = value;
+            ResetValues();
+        }
+    }
+
+    // one Activity
+    Activity Activity { get; set; } = new Activity();
+
+    // all Exercises from User
+    List<Exercise> Exercises { get; set; }
+
+    // all Workouts from User
+    List<Workout> Workouts { get; set; }
+
+    Exercise? _selectedExercise;
+
+    Exercise? SelectedExercise
+    {
+        get => _selectedExercise;
+        set
+        {
+            if (_selectedExercise == value) return;
+            _selectedExercise = value;
+            SelectedExerciseChanged();
+        }
+    }
+
+    Workout? _selectedWorkout;
+
+    Workout? SelectedWorkout
+    {
+        get => _selectedWorkout;
+        set
+        {
+            if (_selectedWorkout == value) return;
+            _selectedWorkout = value;
+    // SelectedWorkoutChanged();
+        }
+    }
+
+    readonly Func<Exercise, string> GetExerciseName = e => e.Name;
+    readonly Func<Workout, string> GetWorkoutName = w => w.Name;
+
+    public async Task SelectedExerciseChanged()
+    {
+        if (SelectedExercise == null) return;
+
+        var lastActivity = await ActivityRepository.GetLastActivityByExercise(SelectedExercise.Id);
+
+        if (lastActivity != null)
+        {
+            Activity = new Activity()
+            {
+                Exercise = SelectedExercise,
+                Repetition = lastActivity.Repetition,
+                Set = lastActivity.Set,
+                Weight = lastActivity.Weight
+            };
+        }
+        else
+        {
+            Activity = new Activity()
+            {
+                Exercise = SelectedExercise
+            };
+        }
+
+        StateHasChanged();
+    }
+
+    public async Task SelectedWorkoutChanged()
+    {
+        StateHasChanged();
+    }
+
+    public void ResetValues()
+    {
+        Activity = new Activity();
+        _selectedExercise = null;
+    }
+
+    async Task SaveNewActivity()
+    {
+        switch (SelectedTypeOfAddition)
+        {
+            case AdditionType.WORKOUT:
+                if (SelectedWorkout == null)
+                {
+                    Snackbar.Add("Please select a workout!", Severity.Info);
+                    return;
+                }
+                Exercises = await ExerciseRepository.GetExercisesByWorkout(SelectedWorkout.Id);
+
+                var lastActivities = await ActivityRepository.GetLastActivitiesByExercises(Exercises.Select(exercise => exercise.Id).ToList());
+                var newActivities = new List<Activity>();
+                if (lastActivities.Any())
+                {
+                    newActivities = Exercises.Select((t, i) => new Activity()
+                    {
+                        ExerciseId = t.Id, Exercise = t, DateValue = DateOnly.FromDateTime(DateManager.SelectedDate ?? DateTime.Today), Repetition = lastActivities[i].Repetition, Set = lastActivities[i].Set, Weight = lastActivities[i].Weight
+                    }).ToList();
+                }
+                else
+                {
+                    newActivities = Exercises.Select((t, i) => new Activity()
+                    {
+                        ExerciseId = t.Id, Exercise = t, DateValue = DateOnly.FromDateTime(DateManager.SelectedDate ?? DateTime.Today), Repetition = default, Set = default, Weight = default
+                    }).ToList();
+                }
+
+                await ActivityRepository.CreateAsync(newActivities);
+                Exercises.ForEach(e => e.IsSelected = false);
+
+                Snackbar.Add("Activities created successfully", Severity.Success);
+                break;
+            case AdditionType.MULTIPLE:
+                Exercises = Exercises.Where(e => e.IsSelected).ToList();
+
+                var lastActivities2 = await ActivityRepository.GetLastActivitiesByExercises(Exercises.Select(exercise => exercise.Id).ToList());
+                var newActivities2 = new List<Activity>();
+                if (lastActivities2.Any())
+                {
+                    newActivities2 = Exercises.Select((t, i) => new Activity()
+                    {
+                        ExerciseId = t.Id, Exercise = t, DateValue = DateOnly.FromDateTime(DateManager.SelectedDate ?? DateTime.Today), Repetition = lastActivities2[i].Repetition, Set = lastActivities2[i].Set, Weight = lastActivities2[i].Weight
+                    }).ToList();
+                }
+                else
+                {
+                    newActivities2 = Exercises.Select((t, i) => new Activity()
+                    {
+                        ExerciseId = t.Id, Exercise = t, DateValue = DateOnly.FromDateTime(DateManager.SelectedDate ?? DateTime.Today), Repetition = default, Set = default, Weight = default
+                    }).ToList();
+                }
+
+                await ActivityRepository.CreateAsync(newActivities2);
+                Exercises.ForEach(e => e.IsSelected = false);
+
+                Snackbar.Add("Activities created successfully", Severity.Success);
+                break;
+            case AdditionType.ONE:
+            default:
+                if (SelectedExercise == null)
+                {
+                    Snackbar.Add($"Please select an exercise!", Severity.Info);
+                    return;
+                }
+
+                Activity.Exercise = SelectedExercise;
+                Activity.DateValue = DateOnly.FromDateTime(DateManager.SelectedDate ?? DateTime.Today);
+
+                await ActivityRepository.CreateAsync(Activity);
+
+                Snackbar.Add("Activity created successfully", Severity.Success);
+                break;
+        }
+
+        NavigationManager.NavigateTo(NavigationProvider["ViewActivities"].Link);
+    }
+
+    void EditExercise(int exerciseId)
+    {
+        NavigationManager.NavigateTo($"{NavigationProvider["EditExercise"].Link}/{exerciseId}");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!await UserService.IsAuthenticated()) return;
+
+        Exercises = await ExerciseRepository.ReadAsync(e => e.UserId == UserService.CurrentUser!.Id);
+        Workouts = await WorkoutRepository.ReadAsync(w => w.UserId == UserService.CurrentUser!.Id);
+    }
+
+    public enum AdditionType
+    {
+        ONE,
+        MULTIPLE,
+        WORKOUT
+    }
+
+}

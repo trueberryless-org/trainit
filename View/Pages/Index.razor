@@ -7,7 +7,7 @@
         if (!firstRender) return;
         
         if (await UserService.IsAuthenticated())
-            NavigationManager.NavigateTo(NavigationProvider["Home"].Link);
+            NavigationManager.NavigateTo(NavigationProvider["ViewActivities"].Link);
         else
             NavigationManager.NavigateTo(NavigationProvider["Login"].Link);
     }
