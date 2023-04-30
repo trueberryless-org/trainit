@@ -7,7 +7,7 @@ on:
 
 env:
   REGISTRY: docker.io
-  IMAGE_NAME: trueberryless/template
+  IMAGE_NAME: trueberryless/trainit
 
 jobs:
 
