@@ -61,7 +61,11 @@ VALUES (1, 'Battle Ropes', 'Hold onto two ropes and alternate whipping them up a
        (21, 'Incline Bench Press', 'Lie down on a bench at a 30-45 degree angle, grasp the barbell with hands slightly wider than shoulder-width apart, lower the barbell down to your chest, and push it back up until your arms are fully extended.', 8),
        (22, 'Shrugs', 'Hold a barbell or dumbbells at arm''s length by your sides, lift your shoulders up towards your ears as high as possible, hold for a second, and lower them back down.', null),       
        (23, 'Lat-Pulls', 'Sit at a lat-pull machine with your hands on the bar, pull the bar down towards your chest by engaging your back muscles, hold for a second, then release back up slowly.', 9),       
-       (24, 'Leg Extensions', 'Sit on a leg extension machine, hook your feet under the padded bar, and straighten your legs until they are parallel to the ground, then release back down slowly.', 1);      
+       (24, 'Leg Extensions', 'Sit on a leg extension machine, hook your feet under the padded bar, and straighten your legs until they are parallel to the ground, then release back down slowly.', 1),      
+       (25, 'Lateral Raises', 'Hold dumbbells by your sides, lift your arms out to the sides until they''re parallel to the ground, then lower them back down.', null),      
+       (26, 'Dumbbell Flyes', 'Lie on a bench, hold dumbbells above your chest, lower them out to the sides until your arms are parallel to the ground, then lift them back up.', null),      
+       (27, 'Face Pulls', 'Attach rope to cable machine at chest height, pull rope towards face with elbows high, then release tension and return to starting position.', null),      
+       (28, 'Hammer Curls', 'Hold dumbbells by your sides with palms facing inwards, curl weights towards shoulders while keeping elbows close to your sides, then lower back down.', null);      
 
 insert into workout_assets (WORKOUT_ASSET_ID, NAME, DESCRIPTION) 
 VALUES (1, 'Push','A Workout focused on pushing exercises, training the chest, triceps and shoulder.'),
@@ -88,7 +92,11 @@ VALUES (1, 'Quadriceps'),
        (14, 'Full-body'),
        (15, 'Arms'),
        (16, 'Upper-chest'),
-       (17, 'Neck');
+       (17, 'Neck'),
+       (18, 'Lateral Deltoids'),
+       (19, 'Pectoralis Major'),
+       (20, 'Rear Deltoids'),
+       (21, 'Upper Back Muscles');
 
 insert into exercise_asset_has_muscle_assets_jt (EXERCISE_ASSET_ID, MUSCLE_ASSET_ID)
 VALUES (1,8),
@@ -141,8 +149,15 @@ VALUES (1,8),
        (21,16),
        (22,17),
        (23,9),
-       (24,1);
+       (24,1),
+       (25,18),
+       (26,19),
+       (27,20),
+       (27,21),
+       (28,10);
        
-
+insert into workout_asset_has_exercise_assets_jt (WORKOUT_ASSET_ID, EXERCISE_ASSET_ID) 
+VALUES (1, ),
+       (1, ),
 
        
