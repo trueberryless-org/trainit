@@ -5,38 +5,35 @@
 <AuthorizeView>
     <Authorized>
         <MudContainer Class="mt-8">
-            <MudStack Spacing="16">
-                <MudStack Spacing="8">
-                    <h1 class="ms-4">Workouts</h1>
-                    <MudDivider/>
-                </MudStack>
-
-                <DataInit Data="Workouts">
-                    <ChildContent Context="workouts">
-                        <MudList Clickable="true">
-                            @foreach (var workout in workouts)
-                            {
-                                <MudListItem OnClick="() => NavigateToDetailedView(workout.Id)">
-                                    <MudGrid Style="min-height: 4rem;">
-                                        <MudItem xs="10" Style="display: flex; align-items: center;">
-                                            @workout.Name
-                                        </MudItem>
-                                        <MudItem xs="2" Style="display: flex; align-items: center;">
-                                            <MudIconButton Icon="@Icons.Filled.Edit" OnClick="() => EditWorkout(workout.Id)"/>
-                                        </MudItem>
-                                    </MudGrid>
-                                </MudListItem>
-                            }
-                        </MudList>
-
-                        <div Style="position: fixed; bottom: 13vh; right: 2vh; display: grid; gap: 1rem;">
-                            <MudFab Color="Color.Info" StartIcon="@Icons.Material.Filled.Add" OnClick="NewWorkout"/>
-                        </div>
-
-                    </ChildContent>
-                </DataInit>
-
+            <MudStack Spacing="8">
+                <h1 class="ms-4">Workouts</h1>
+                <MudDivider/>
             </MudStack>
+
+            <DataInit Data="Workouts">
+                <ChildContent Context="workouts">
+                    <MudList Clickable="true">
+                        @foreach (var workout in workouts)
+                        {
+                            <MudListItem OnClick="() => NavigateToDetailedView(workout.Id)">
+                                <MudGrid Style="min-height: 4rem;">
+                                    <MudItem xs="10" Style="display: flex; align-items: center;">
+                                        @workout.Name
+                                    </MudItem>
+                                    <MudItem xs="2" Style="display: flex; align-items: center;">
+                                        <MudIconButton Icon="@Icons.Filled.Edit" OnClick="() => EditWorkout(workout.Id)"/>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudListItem>
+                        }
+                    </MudList>
+
+                    <div Style="position: fixed; bottom: 13vh; right: 2vh; display: grid; gap: 1rem;">
+                        <MudFab Color="Color.Info" StartIcon="@Icons.Material.Filled.Add" OnClick="NewWorkout"/>
+                    </div>
+
+                </ChildContent>
+            </DataInit>
         </MudContainer>
     </Authorized>
 </AuthorizeView>

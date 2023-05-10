@@ -224,19 +224,22 @@
 
                 var lastActivities = await ActivityRepository.GetLastActivitiesByExercises(Exercises.Select(exercise => exercise.Id).ToList());
                 var newActivities = new List<Activity>();
-                if (lastActivities.Any())
+
+                foreach (var exercise in Exercises)
                 {
-                    newActivities = Exercises.Select((t, i) => new Activity()
+                    float weight = lastActivities.Find(la => la.ExerciseId == exercise.Id) == null ? default : lastActivities.Find(la => la.ExerciseId == exercise.Id).Weight;
+                    int repetition = lastActivities.Find(la => la.ExerciseId == exercise.Id) == null ? default : lastActivities.Find(la => la.ExerciseId == exercise.Id).Repetition;
+                    int set = lastActivities.Find(la => la.ExerciseId == exercise.Id) == null ? default : lastActivities.Find(la => la.ExerciseId == exercise.Id).Set;
+                    
+                    newActivities.Add(new Activity()
                     {
-                        ExerciseId = t.Id, Exercise = t, DateValue = DateOnly.FromDateTime(DateManager.SelectedDate ?? DateTime.Today), Repetition = lastActivities[i].Repetition, Set = lastActivities[i].Set, Weight = lastActivities[i].Weight
-                    }).ToList();
-                }
-                else
-                {
-                    newActivities = Exercises.Select((t, i) => new Activity()
-                    {
-                        ExerciseId = t.Id, Exercise = t, DateValue = DateOnly.FromDateTime(DateManager.SelectedDate ?? DateTime.Today), Repetition = default, Set = default, Weight = default
-                    }).ToList();
+                        ExerciseId = exercise.Id,
+                        Exercise = exercise,
+                        DateValue = DateOnly.FromDateTime(DateManager.SelectedDate ?? DateTime.Today),
+                        Repetition = repetition,
+                        Set = set,
+                        Weight = weight
+                    });
                 }
 
                 await ActivityRepository.CreateAsync(newActivities);
@@ -249,19 +252,22 @@
 
                 var lastActivities2 = await ActivityRepository.GetLastActivitiesByExercises(Exercises.Select(exercise => exercise.Id).ToList());
                 var newActivities2 = new List<Activity>();
-                if (lastActivities2.Any())
+                
+                foreach (var exercise in Exercises)
                 {
-                    newActivities2 = Exercises.Select((t, i) => new Activity()
+                    float weight = lastActivities2.Find(la => la.ExerciseId == exercise.Id) == null ? default : lastActivities2.Find(la => la.ExerciseId == exercise.Id).Weight;
+                    int repetition = lastActivities2.Find(la => la.ExerciseId == exercise.Id) == null ? default : lastActivities2.Find(la => la.ExerciseId == exercise.Id).Repetition;
+                    int set = lastActivities2.Find(la => la.ExerciseId == exercise.Id) == null ? default : lastActivities2.Find(la => la.ExerciseId == exercise.Id).Set;
+                    
+                    newActivities2.Add(new Activity()
                     {
-                        ExerciseId = t.Id, Exercise = t, DateValue = DateOnly.FromDateTime(DateManager.SelectedDate ?? DateTime.Today), Repetition = lastActivities2[i].Repetition, Set = lastActivities2[i].Set, Weight = lastActivities2[i].Weight
-                    }).ToList();
-                }
-                else
-                {
-                    newActivities2 = Exercises.Select((t, i) => new Activity()
-                    {
-                        ExerciseId = t.Id, Exercise = t, DateValue = DateOnly.FromDateTime(DateManager.SelectedDate ?? DateTime.Today), Repetition = default, Set = default, Weight = default
-                    }).ToList();
+                        ExerciseId = exercise.Id,
+                        Exercise = exercise,
+                        DateValue = DateOnly.FromDateTime(DateManager.SelectedDate ?? DateTime.Today),
+                        Repetition = repetition,
+                        Set = set,
+                        Weight = weight
+                    });
                 }
 
                 await ActivityRepository.CreateAsync(newActivities2);
