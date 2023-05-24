@@ -1,6 +1,84 @@
-﻿@page "/Help"
-<h3>Help</h3>
+﻿@page "/help"
+
+<PageTitle>Help</PageTitle>
+
+<MudContainer Class="mt-8">
+    <MudStack Spacing="8">
+        <h1>Help</h1>
+        <MudDivider/>
+
+        <MudExpansionPanels DisableBorders="true">
+            <MudExpansionPanel Text="Overview">
+                <MudStack Spacing="16">
+                    <MudStack Spacing="4">
+                        <div Class="d-flex align-center mud-width-full">
+                            <MudIcon Icon="@Icons.Material.Filled.List" Size="Size.Large"></MudIcon>
+                            <h2 class="mx-5">Workouts</h2>
+                        </div>
+                        <div>
+                            A workout is a planned session of physical activities designed to improve fitness and health by targeting different muscle groups or specific goals.
+                        </div>
+                        <div>
+                            <MudChip Variant="Variant.Text" Color="Color.Secondary">Collection of Exercises</MudChip>
+                            <MudChip Variant="Variant.Text" Color="Color.Info">faster usability</MudChip>
+                            @* TODO remove coming soon *@
+                            <MudChip Variant="Variant.Text" Color="Color.Success">shareable [coming soon]</MudChip>
+                            <MudChip Variant="Variant.Text" Color="Color.Primary">easy to create</MudChip>
+                            <MudChip Variant="Variant.Text" Color="Color.Warning">simplifies using Activities</MudChip>
+                        </div>
+                    </MudStack>
+                    <MudStack Spacing="4">
+                        <div Class="d-flex align-center mud-width-full">
+                            <MudIcon Icon="@Icons.Material.Filled.FitnessCenter" Size="Size.Large"></MudIcon>
+                            <h2 class="mx-5">Exercises</h2>
+                        </div>
+                        <div>
+                            Exercise refers to physical activity performed to enhance fitness and health, such as running, weightlifting, yoga, or any form of physical exertion.
+                        </div>
+                        <div>
+                            <MudChip Variant="Variant.Text" Color="Color.Secondary">Exercises in Fitness Center</MudChip>
+                            <MudChip Variant="Variant.Text" Color="Color.Info">high data privacy</MudChip>
+                            <MudChip Variant="Variant.Text" Color="Color.Success">editable</MudChip>
+                            <MudChip Variant="Variant.Text" Color="Color.Primary">easy to create</MudChip>
+                            <MudChip Variant="Variant.Text" Color="Color.Warning">fast Activity creation</MudChip>
+                        </div>
+                    </MudStack>
+                    <MudStack Spacing="4">
+                        <div Class="d-flex align-center mud-width-full">
+                            <MudIcon Icon="@Icons.Material.Filled.CalendarToday" Size="Size.Large"></MudIcon>
+                            <h2 class="mx-5">Activities</h2>
+                        </div>
+                        <div>
+                            Activities in the context of fitness are the specific exercises or tasks performed during a workout session, tailored to individual goals and preferences.
+                        </div>
+                        <div>
+                            <MudChip Variant="Variant.Text" Color="Color.Secondary">Copy of Exercise but on a specific day</MudChip>
+                            <MudChip Variant="Variant.Text" Color="Color.Info">save weights, sets and repetitions</MudChip>
+                            <MudChip Variant="Variant.Text" Color="Color.Success">editable</MudChip>
+                            <MudChip Variant="Variant.Text" Color="Color.Primary">easy to create</MudChip>
+                            <MudChip Variant="Variant.Text" Color="Color.Warning">multiple can be created at once</MudChip>
+                        </div>
+                    </MudStack>
+                </MudStack>
+            </MudExpansionPanel>
+            <MudExpansionPanel Text="Activity - Details">
+
+            </MudExpansionPanel>
+            <MudExpansionPanel Text="Exercise - Details">
+
+            </MudExpansionPanel>
+            <MudExpansionPanel Text="Workout - Details">
+
+            </MudExpansionPanel>
+            <MudExpansionPanel Text="Profile - Details">
+
+            </MudExpansionPanel>
+        </MudExpansionPanels>
+    </MudStack>
+</MudContainer>
+
 @* TODO help page *@
+
 @code {
-    
+
 }

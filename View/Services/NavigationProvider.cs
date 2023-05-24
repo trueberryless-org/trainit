@@ -159,6 +159,16 @@ public class NavigationProvider
                     Icon = Icons.Material.Filled.List
                 }
             },
+            {
+                "Help",
+                new Page()
+                {
+                    Name = "Help",
+                    Link = "/help",
+                    Type = PageType.CONTENT,
+                    Icon = Icons.Material.Filled.Help
+                }
+            },
         };
 
         var url = _navigationManager.Uri;
