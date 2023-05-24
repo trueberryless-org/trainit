@@ -16,7 +16,7 @@ public class DateManager
     private DateTime? _selectedDate;
     public DateTime? SelectedDate
     {
-        get => _selectedDate ??= DateTime.Today;
+        get => _selectedDate;
         set
         {
             _selectedDate = value;

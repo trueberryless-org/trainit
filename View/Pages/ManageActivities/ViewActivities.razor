@@ -77,7 +77,7 @@
         try
         {
             if (DateManager.SelectedDate == null) return;
-            Activities = await ActivityRepository.GetActivitiesByUserByDate(UserService.CurrentUser!.Id, DateOnly.FromDateTime(DateManager.SelectedDate ?? DateTime.Today));
+            Activities = await ActivityRepository.GetActivitiesByUserByDate(UserService.CurrentUser!.Id, DateOnly.FromDateTime(DateManager.SelectedDate.Value));
             StateHasChanged();
         }
         catch (Exception exception)
