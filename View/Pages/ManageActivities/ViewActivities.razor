@@ -14,7 +14,7 @@
 
                 <MudCardActions>
                     <MudIconButton OnClick="DateManager.PrevDate" Icon="@Icons.Material.Filled.ArrowBackIos" aria-label="previous day"></MudIconButton>
-                    <MudDatePicker Label="Choose date" @ref="DateManager.DatePicker" Date="DateManager.SelectedDate" AutoClose="true" MaxDate="DateTime.Today" PickerVariant="PickerVariant.Dialog" class="mx-4">
+                    <MudDatePicker Label="Choose date" @ref="DateManager.DatePicker" Date="DatePickerDate" AutoClose="true" MaxDate="DateTime.Today" PickerVariant="PickerVariant.Dialog" class="mx-4">
                         <PickerActions Context="_">
                             <MudButton Class="mr-auto align-self-start" OnClick="DateManager.DatePickerToday">Today</MudButton>
                         </PickerActions>
@@ -34,10 +34,10 @@
                                     <MudItem xs="7" Style="display: flex; align-items: center;">
                                         @activity.Exercise.Name
                                     </MudItem>
-                                    <MudItem xs="3" Style="text-align: end; display: flex; align-items: center;">
+                                    <MudItem xs="3" Style="text-align: end; display: flex; align-items: center; justify-content: end">
                                         @Math.Round(activity.Weight, 2) kg
                                     </MudItem>
-                                    <MudItem xs="2" Style="display: flex; align-items: center;">
+                                    <MudItem xs="2" Style="display: flex; align-items: center; justify-content: end">
                                         <MudIconButton Icon="@Icons.Filled.Edit" OnClick="() => EditActivity(activity.Id)"/>
                                     </MudItem>
                                 </MudGrid>
@@ -70,13 +70,23 @@
 
 @code {
 
+    DateTime? DatePickerDate;
+
     List<Activity> Activities { get; set; } = null!;
 
     private async Task ReloadActivities(object? sender, EventArgs e)
     {
-        if (DateManager.SelectedDate == null) return;
-        Activities = await ActivityRepository.GetActivitiesByUserByDate(UserService.CurrentUser!.Id, DateOnly.FromDateTime(DateManager.SelectedDate.Value));
+        if (!UserService.IsAuthenticated().Result) return;
+        if (DateManager.SelectedDate == null || !DateManager.SelectedDate.HasValue) return;
+
+        Console.WriteLine("Hello?");
+        Activities = await ActivityRepository.GetActivitiesByUserByDate(UserService.CurrentUser.Id, DateManager.SelectedDate.Value);
         StateHasChanged();
+    }
+
+    private async Task SetDatePickerDate(object? sender, EventArgs e)
+    {
+        DatePickerDate = DateManager.SelectedDate;
     }
 
     private void EditActivity(int activityId)
@@ -91,12 +101,14 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if (await UserService.IsAuthenticated())
-        {
-            Activities = await ActivityRepository.GetActivitiesByUserByDate(UserService.CurrentUser!.Id, DateOnly.FromDateTime(DateManager.SelectedDate ?? DateTime.Today));
-        }
+        if (!await UserService.IsAuthenticated()) return;
+        if (DateManager.SelectedDate == null || !DateManager.SelectedDate.HasValue) return;
 
-        EventProvider.SelectedDateChanged += new EventHandler(async (s, e) => await ReloadActivities(s, e));
+        DatePickerDate = DateManager.SelectedDate;
+        Activities = await ActivityRepository.GetActivitiesByUserByDate(UserService.CurrentUser.Id, DateManager.SelectedDate.Value);
+
+        EventProvider.SelectedDateChanged += new EventHandler((sender, e) => ReloadActivities(sender, e));
+        EventProvider.SelectedDateChanged += new EventHandler((sender, e) => SetDatePickerDate(sender, e));
     }
 
 }

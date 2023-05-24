@@ -26,7 +26,7 @@ public interface IActivityRepository : IRepository<Activity>
     /// </summary>
     /// <param name="date">value of date you want to get the activities from</param>
     /// <returns>all activities trained on the given date</returns>
-    Task<List<Activity>> GetActivitiesByDate(DateOnly date, CancellationToken ct = default);
+    Task<List<Activity>> GetActivitiesByDate(DateTime date, CancellationToken ct = default);
     
     /// <summary>
     /// Returns you all activities which correspond to the given user and date (AND-GATE)
@@ -34,7 +34,7 @@ public interface IActivityRepository : IRepository<Activity>
     /// <param name="userId">Id of the user you want to get the activities from</param>
     /// <param name="date">value of date you want to get the activities from</param>
     /// <returns>all activities where user and date conditions are met</returns>
-    Task<List<Activity>> GetActivitiesByUserByDate(int userId, DateOnly date, CancellationToken ct = default);
+    Task<List<Activity>> GetActivitiesByUserByDate(int userId, DateTime date, CancellationToken ct = default);
 
     /// <summary>
     /// Returns the last activity for the exercise given.

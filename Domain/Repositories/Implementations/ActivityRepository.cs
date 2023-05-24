@@ -26,19 +26,20 @@ public class ActivityRepository : ARepository<Activity>, IActivityRepository
             .ToListAsync(cancellationToken: ct);
     }
 
-    public async Task<List<Activity>> GetActivitiesByDate(DateOnly date, CancellationToken ct = default)
+    public async Task<List<Activity>> GetActivitiesByDate(DateTime datetime, CancellationToken ct = default)
     {
         return await Table
             .Include(s => s.Exercise)
-            .Where(s => s.DateValue == date)
+            .Where(s => s.DateValue == DateOnly.FromDateTime(datetime))
             .ToListAsync(cancellationToken: ct);
     }
 
-    public async Task<List<Activity>> GetActivitiesByUserByDate(int userId, DateOnly date, CancellationToken ct = default)
+    public async Task<List<Activity>> GetActivitiesByUserByDate(int userId, DateTime datetime, CancellationToken ct = default)
     {
         return await Table
+            .Where(s => s.DateValue == DateOnly.FromDateTime(datetime))
             .Include(s => s.Exercise)
-            .Where(s => s.Exercise.UserId == userId && s.DateValue == date)
+            .Where(s => s.Exercise.UserId == userId)
             .ToListAsync(cancellationToken: ct);
     }
 

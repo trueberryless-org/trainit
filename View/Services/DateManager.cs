@@ -16,8 +16,10 @@ public class DateManager
         get => _selectedDate;
         set
         {
+            if (value == _selectedDate) return;
             _selectedDate = value;
             
+            Console.WriteLine("oh no");
             // raise event
             _eventProvider.OnSelectedDateChanged();
         }
@@ -37,9 +39,9 @@ public class DateManager
         SelectedDate = SelectedDate?.AddDays(1);
     }
     
-    public async Task DatePickerToday()
+    public void DatePickerToday()
     {
-        await DatePicker!.GoToDate(DateTime.Today);
-        DatePicker.Close();
+        DatePicker?.GoToDate(DateTime.Today);
+        DatePicker?.Close();
     }
 }
