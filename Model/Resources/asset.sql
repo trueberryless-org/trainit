@@ -70,10 +70,9 @@ VALUES (1, 'Battle Ropes', 'Hold onto two ropes and alternate whipping them up a
 insert into workout_assets (WORKOUT_ASSET_ID, NAME, DESCRIPTION) 
 VALUES (1, 'Push','A Workout focused on pushing exercises, training the chest, triceps and shoulder.'),
        (2, 'Pull', 'A Workout focused on pulling exercises, training the back and biceps.'),
-       (2, 'Leg', 'A Workout focused on leg exercises, training the leg muscles'),
-       (2, 'Upper-body', 'A Workout focused on the upper-body, training the arms, chest etc.'),
-       (2, 'Lower-body', 'A Workout focused on the lower-body, mainly training the legs.'),
-       (2, 'Full-body', 'A Workout training the most muscles of your body.');
+       (3, 'Leg', 'A Workout focused on leg exercises, training the leg muscles'),
+       (4, 'Upper-body', 'A Workout focused on the upper-body, training the arms, chest etc.'),
+       (5, 'Full-body', 'A Workout training the most muscles of your body.');
 
 insert into muscle_assets (MUSCLE_ASSET_ID, NAME) 
 VALUES (1, 'Quadriceps'),
@@ -157,7 +156,34 @@ VALUES (1,8),
        (28,10);
        
 insert into workout_asset_has_exercise_assets_jt (WORKOUT_ASSET_ID, EXERCISE_ASSET_ID) 
-VALUES (1, ),
-       (1, ),
+VALUES (1, 2),
+       (1, 21),
+       (1, 5),
+       (1, 25),
+       (1, 12),
+       (1, 26),
+       (2, 6),
+       (2, 7),
+       (2, 27),
+       (2, 11),
+       (2, 28),
+       (3, 4),
+       (3, 3),
+       (3, 9),
+       (3, 24),
+       (3, 10),
+       (4, 2),
+       (4, 6),
+       (4, 7),
+       (4, 5),
+       (4, 12),
+       (4, 11),
+       (5, 4),
+       (5, 3),
+       (5, 2),
+       (5, 6),
+       (5, 5),
+       (5, 11),
+       (5, 12);
 
        
