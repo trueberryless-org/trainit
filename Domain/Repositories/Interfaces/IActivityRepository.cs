@@ -5,6 +5,8 @@ namespace Domain.Repositories.Interfaces;
 
 public interface IActivityRepository : IRepository<Activity>
 {
+    // TODO ranked system for motivation
+    
     /// <summary>
     /// Returns the activity with the given id
     /// </summary>

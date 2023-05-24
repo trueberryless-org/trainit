@@ -5,6 +5,8 @@ namespace Model.Entities.Log;
 [Table("LOG_ENTRIES")]
 public class LogEntry
 {
+    // TODO User Table for help page on first login
+    
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column("LOG_ID")]
     public int Id { get; set; }
