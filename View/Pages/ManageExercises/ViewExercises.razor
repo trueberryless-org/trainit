@@ -7,7 +7,10 @@
         <MudContainer Class="mt-8">
 
             <MudStack Spacing="8">
-                <h1 class="ms-4">Exercises</h1>
+                <div>
+                    <h1 class="ms-4">Exercises</h1>
+                    <h5 class="ms-4">Count: @(Exercises != null ? Exercises.Count : 0)</h5>
+                </div>
                 <MudDivider/>
             </MudStack>
 

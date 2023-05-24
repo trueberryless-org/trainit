@@ -7,11 +7,14 @@
     <Authorized>
         <MudContainer Class="mt-8">
             <MudStack Spacing="8">
-                <h1 class="ms-4">Activities</h1>
+                <div>
+                    <h1 class="ms-4">Activities</h1>
+                    <h5 class="ms-4">Count: @(Activities != null ? Activities.Count : 0)</h5>
+                </div>
 
                 <MudCardActions>
                     <MudIconButton OnClick="DateManager.PrevDate" Icon="@Icons.Material.Filled.ArrowBackIos" aria-label="previous day"></MudIconButton>
-                    <MudDatePicker Label="Choose date" @ref="DateManager.DatePicker" @bind-Date="DateManager.SelectedDate" AutoClose="true" MaxDate="DateManager.Today" class="mx-4">
+                    <MudDatePicker Label="Choose date" @ref="DateManager.DatePicker" Date="DateManager.SelectedDate" AutoClose="true" MaxDate="DateTime.Today" PickerVariant="PickerVariant.Dialog" class="mx-4">
                         <PickerActions Context="_">
                             <MudButton Class="mr-auto align-self-start" OnClick="DateManager.DatePickerToday">Today</MudButton>
                         </PickerActions>
@@ -45,21 +48,21 @@
                     <div Style="position: fixed; bottom: 13vh; right: 2vh; display: grid; gap: 1rem;">
                         <MudFab Color="Color.Info" StartIcon="@Icons.Material.Filled.Add" OnClick="NewActivity"/>
                     </div>
-                    
+
                 </ChildContent>
             </DataInit>
-            
+
         </MudContainer>
     </Authorized>
     <NotAuthorized>
         <MudContainer Class="mt-8">
             <MudStack Spacing="4">
                 <h1 class="ms-4 mb-12">You are not logged in!</h1>
-                
+
                 <MudPaper class="pa-4" Elevation="3">
                     <div>Please click <a href="@NavigationProvider["Login"].Link" style="color: yellow;">here</a> in order to get redirected to the Log In site!</div>
                 </MudPaper>
-                
+
             </MudStack>
         </MudContainer>
     </NotAuthorized>
@@ -67,26 +70,16 @@
 
 @code {
 
-    [Inject]
-    private IDialogService DialogService { get; set; }
-
     List<Activity> Activities { get; set; } = null!;
 
     private async Task ReloadActivities(object? sender, EventArgs e)
     {
-        try
-        {
-            if (DateManager.SelectedDate == null) return;
-            Activities = await ActivityRepository.GetActivitiesByUserByDate(UserService.CurrentUser!.Id, DateOnly.FromDateTime(DateManager.SelectedDate.Value));
-            StateHasChanged();
-        }
-        catch (Exception exception)
-        {
-            Console.WriteLine(exception);
-        }
+        if (DateManager.SelectedDate == null) return;
+        Activities = await ActivityRepository.GetActivitiesByUserByDate(UserService.CurrentUser!.Id, DateOnly.FromDateTime(DateManager.SelectedDate.Value));
+        StateHasChanged();
     }
-    
-    async Task EditActivity(int activityId)
+
+    private void EditActivity(int activityId)
     {
         NavigationManager.NavigateTo($"{NavigationProvider["EditActivity"].Link}/{activityId}");
     }
@@ -104,9 +97,6 @@
         }
 
         EventProvider.SelectedDateChanged += new EventHandler(async (s, e) => await ReloadActivities(s, e));
-        
-        // sometimes buggy
-        if(DateManager.MaxDateReached) StateHasChanged();
     }
 
 }

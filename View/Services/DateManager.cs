@@ -7,10 +7,7 @@ public class DateManager
     public DateManager(EventProvider eventProvider)
     {
         _eventProvider = eventProvider;
-        Today = DateTime.Today;
-        SelectedDate = Today;
-
-        _eventProvider.SelectedDateChanged += new EventHandler(HandleDateChangeAsync);
+        SelectedDate = DateTime.Today;
     }
     
     private DateTime? _selectedDate;
@@ -26,17 +23,9 @@ public class DateManager
         }
     }
 
-    public bool MaxDateReached { get; private set; } = true;
-
-    public readonly DateTime Today;
+    public bool MaxDateReached => SelectedDate == DateTime.Today;
     
     public MudDatePicker? DatePicker { get; set; }
-
-
-    public void HandleDateChangeAsync(object? sender, EventArgs e)
-    {
-        MaxDateReached = SelectedDate == Today;
-    }
 
     public void PrevDate()
     {
