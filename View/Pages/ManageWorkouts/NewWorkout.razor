@@ -27,28 +27,32 @@
                         </ChildContent>
                     </DataInit>
                     
-                    <h2 class="ms-0 mb-5 mt-10">Exercises in this Workout</h2>
-                    @* TODO create exercise button *@
-                    <DataInit Data="Exercises">
-                        <ChildContent Context="exercises">
-                            <MudStack Spacing="4">
-                                <MudPaper class="pa-4" Elevation="3">
-                                    <MudList Clickable="true">
-                                        @foreach (var exercise in exercises)
-                                        {
-                                            <MudListItem>
-                                                <MudGrid Style="min-height: 4rem;">
-                                                    <MudItem xs="10" Style="display: flex; align-items: center;">
-                                                        <MudCheckBox Color="Color.Primary" Label="@exercise.Name" @bind-Checked="@exercise.IsSelected" Style="min-width: 50%"></MudCheckBox>
-                                                    </MudItem>
-                                                </MudGrid>
-                                            </MudListItem>
-                                        }
-                                    </MudList>
-                                </MudPaper>
-                            </MudStack>
-                        </ChildContent>
-                    </DataInit>
+                    @if (Exercises != null && Exercises.Any())
+                    {
+                        <h2 class="ms-0 mb-5 mt-10">Exercises in this Workout</h2>
+
+                        <DataInit Data="Exercises">
+                            <ChildContent Context="exercises">
+                                <MudStack Spacing="4">
+                                    <MudPaper class="pa-4" Elevation="3">
+                                        <MudList Clickable="true">
+                                            @foreach (var exercise in exercises)
+                                            {
+                                                <MudListItem>
+                                                    <MudGrid Style="min-height: 4rem;">
+                                                        <MudItem xs="10" Style="display: flex; align-items: center;">
+                                                            <MudCheckBox Color="Color.Primary" Label="@exercise.Name" @bind-Checked="@exercise.IsSelected" Style="min-width: 50%"></MudCheckBox>
+                                                        </MudItem>
+                                                    </MudGrid>
+                                                </MudListItem>
+                                            }
+                                        </MudList>
+                                    </MudPaper>
+                                </MudStack>
+                            </ChildContent>
+                        </DataInit>
+                    }
+
                 </MudForm>
             </MudStack>
         </MudContainer>

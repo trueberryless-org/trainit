@@ -34,28 +34,32 @@
                     </DataInit>
                 </MudForm>
 
-                <h2 class="ms-0 mb-5 mt-10">Workouts where Exercise is in:</h2>
-                @* TODO create workout button *@
-                <DataInit Data="Workouts">
-                    <ChildContent Context="workouts">
-                        <MudStack Spacing="4">
-                            <MudPaper class="pa-4" Elevation="3">
-                                <MudList Clickable="true">
-                                    @foreach (var workout in workouts)
-                                    {
-                                        <MudListItem>
-                                            <MudGrid Style="min-height: 4rem;">
-                                                <MudItem xs="10" Style="display: flex; align-items: center;">
-                                                    <MudCheckBox Color="Color.Primary" Label="@workout.Name" @bind-Checked="@workout.IsSelected" Style="min-width: 50%"></MudCheckBox>
-                                                </MudItem>
-                                            </MudGrid>
-                                        </MudListItem>
-                                    }
-                                </MudList>
-                            </MudPaper>
-                        </MudStack>
-                    </ChildContent>
-                </DataInit>
+                @if (Workouts != null && Workouts.Any())
+                {
+                    <h2 class="ms-0 mb-5 mt-10">Workouts where Exercise is in:</h2>
+
+                    <DataInit Data="Workouts">
+                        <ChildContent Context="workouts">
+                            <MudStack Spacing="4">
+                                <MudPaper class="pa-4" Elevation="3">
+                                    <MudList Clickable="true">
+                                        @foreach (var workout in workouts)
+                                        {
+                                            <MudListItem>
+                                                <MudGrid Style="min-height: 4rem;">
+                                                    <MudItem xs="10" Style="display: flex; align-items: center;">
+                                                        <MudCheckBox Color="Color.Primary" Label="@workout.Name" @bind-Checked="@workout.IsSelected" Style="min-width: 50%"></MudCheckBox>
+                                                    </MudItem>
+                                                </MudGrid>
+                                            </MudListItem>
+                                        }
+                                    </MudList>
+                                </MudPaper>
+                            </MudStack>
+                        </ChildContent>
+                    </DataInit>    
+                }
+                
             </MudStack>
         </MudContainer>
 
