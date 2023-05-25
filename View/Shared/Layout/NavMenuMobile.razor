@@ -135,7 +135,7 @@
         
         border-top-left-radius: .8rem;
         border-top-right-radius: .8rem;
-        background: @(MainLayout.IsDarkMode ? ThemeHandler.Theme.PaletteDark.White : ThemeHandler.Theme.Palette.Black);
+        background: @(MainLayout.IsDarkMode ? ThemeProvider.Theme.PaletteDark.White : ThemeProvider.Theme.Palette.Black);
        
         transition: all .5s ease-in-out;
         z-index: 1000;
@@ -148,11 +148,11 @@
         transition: all .5s ease-in-out;
         margin: 3vw;
         width:  100%;
-        color: @(MainLayout.IsDarkMode ? ThemeHandler.Theme.PaletteDark.White : ThemeHandler.Theme.Palette.Black);
+        color: @(MainLayout.IsDarkMode ? ThemeProvider.Theme.PaletteDark.White : ThemeProvider.Theme.Palette.Black);
     } 
     
     .navigation .icon {
-        color: @ThemeHandler.Theme.PaletteDark.White;        
+        color: @ThemeProvider.Theme.PaletteDark.White;        
     }
         
     .navigation .more .list {
@@ -166,7 +166,7 @@
     
     .navigation .more .list .subheadings {
         margin-bottom: -.5rem;
-        color: @(MainLayout.IsDarkMode ? ThemeHandler.Theme.PaletteDark.Warning : ThemeHandler.Theme.Palette.Secondary);
+        color: @(MainLayout.IsDarkMode ? ThemeProvider.Theme.PaletteDark.Warning : ThemeProvider.Theme.Palette.Secondary);
     }
     
     .navigation .more .list .subheadings:not(:first-of-type) {
@@ -208,12 +208,12 @@
         font-size: 1.5em;
         text-align: center;
         transition: all .5s ease-in-out;
-        color: @(MainLayout.IsDarkMode ? ThemeHandler.Theme.PaletteDark.Dark : ThemeHandler.Theme.Palette.White);
+        color: @(MainLayout.IsDarkMode ? ThemeProvider.Theme.PaletteDark.Dark : ThemeProvider.Theme.Palette.White);
     }
     
     .navigation ul li .text {
         position: absolute;
-        color: @(MainLayout.IsDarkMode ? ThemeHandler.Theme.PaletteDark.Black : ThemeHandler.Theme.Palette.White);
+        color: @(MainLayout.IsDarkMode ? ThemeProvider.Theme.PaletteDark.Black : ThemeProvider.Theme.Palette.White);
         font-weight: 400;
         font-size: 0.75em;
         letter-spacing: 0.05em;
@@ -230,15 +230,15 @@
             height: 101vh;            
             /*border-top-left-radius: 1rem;
             border-top-right-radius: 1rem;*/
-            background: @(MainLayout.IsDarkMode ? ThemeHandler.Theme.PaletteDark.Black : ThemeHandler.Theme.Palette.White);
+            background: @(MainLayout.IsDarkMode ? ThemeProvider.Theme.PaletteDark.Black : ThemeProvider.Theme.Palette.White);
         }
         
         .navigation ul li .icon {
-            color: @(MainLayout.IsDarkMode ? ThemeHandler.Theme.PaletteDark.White : ThemeHandler.Theme.Palette.Black);
+            color: @(MainLayout.IsDarkMode ? ThemeProvider.Theme.PaletteDark.White : ThemeProvider.Theme.Palette.Black);
         }
         
         .navigation ul li .text {
-            color: @(MainLayout.IsDarkMode ? ThemeHandler.Theme.PaletteDark.White : ThemeHandler.Theme.Palette.Black);
+            color: @(MainLayout.IsDarkMode ? ThemeProvider.Theme.PaletteDark.White : ThemeProvider.Theme.Palette.Black);
         }        
         
         .navigation .more {

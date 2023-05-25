@@ -39,7 +39,7 @@
             <hr length="short"/>
             <div>&copy; @DateTime.Now.Year</div>
             <div>
-                trueberryless
+                trueberryless & Y0Ying
             </div>
             <br/>
             <div>
@@ -113,7 +113,7 @@
       position: relative;
       display: inline-block;
       margin-bottom: .3rem;
-      color: @(MainLayout.IsDarkMode ? ThemeHandler.Theme.PaletteDark.White : ThemeHandler.Theme.Palette.Dark);
+      color: @(MainLayout.IsDarkMode ? ThemeProvider.Theme.PaletteDark.White : ThemeProvider.Theme.Palette.Dark);
       -webkit-transition: color 0.3s ease-out;
       transition: color 0.3s ease-out;
       cursor: pointer;
@@ -141,11 +141,11 @@
       transition: background 0.3s ease-out, -webkit-transform 0.3s ease-out;
       transition: transform 0.3s ease-out, background 0.3s ease-out;
       transition: transform 0.3s ease-out, background 0.3s ease-out, -webkit-transform 0.3s ease-out;
-      background-color: @(MainLayout.IsDarkMode ? ThemeHandler.Theme.PaletteDark.White : ThemeHandler.Theme.Palette.Dark);
+      background-color: @(MainLayout.IsDarkMode ? ThemeProvider.Theme.PaletteDark.White : ThemeProvider.Theme.Palette.Dark);
     }
     
     .footer-link:hover {
-      color: @(MainLayout.IsDarkMode ? ThemeHandler.Theme.PaletteDark.Secondary : ThemeHandler.Theme.Palette.SecondaryDarken);
+      color: @(MainLayout.IsDarkMode ? ThemeProvider.Theme.PaletteDark.Secondary : ThemeProvider.Theme.Palette.SecondaryDarken);
     }
     
     .footer-link:hover::before {
@@ -153,16 +153,16 @@
               transform: scaleX(0);
       -webkit-transform-origin: bottom right;
               transform-origin: bottom right;
-      background-color: @(MainLayout.IsDarkMode ? ThemeHandler.Theme.PaletteDark.Secondary : ThemeHandler.Theme.Palette.SecondaryDarken);
+      background-color: @(MainLayout.IsDarkMode ? ThemeProvider.Theme.PaletteDark.Secondary : ThemeProvider.Theme.Palette.SecondaryDarken);
     }
 
     footer {
       position: relative;
       padding: 5rem 5rem 10rem 5rem;
-      background-color: @(MainLayout.IsDarkMode ? ThemeHandler.Theme.PaletteDark.DarkDarken : ThemeHandler.Theme.Palette.GrayLighter);
-      color: @(MainLayout.IsDarkMode ? ThemeHandler.Theme.PaletteDark.White : ThemeHandler.Theme.Palette.Dark);
+      background-color: @(MainLayout.IsDarkMode ? ThemeProvider.Theme.PaletteDark.BackgroundGrey : ThemeProvider.Theme.Palette.BackgroundGrey);
+      color: @(MainLayout.IsDarkMode ? ThemeProvider.Theme.PaletteDark.White : ThemeProvider.Theme.Palette.Dark);
       font-size: 1rem;
-      min-height: 100vh;
+      min-height: -webkit-fill-available;
       display: -webkit-box;
       display: -ms-flexbox;
       display: flex;
@@ -212,14 +212,14 @@
       font-size: clamp(1.2rem, 1.64vw, 1.5rem);
       font-weight: 600;
       margin: 0.75rem 0;
-      color: @(MainLayout.IsDarkMode ? ThemeHandler.Theme.PaletteDark.White : ThemeHandler.Theme.Palette.Dark);
+      color: @(MainLayout.IsDarkMode ? ThemeProvider.Theme.PaletteDark.White : ThemeProvider.Theme.Palette.Dark);
     }
     footer hr {
       position: relative;
       width: 100%;
       height: 0.25rem;
       margin: 1.5rem 0;
-      background-color: @(MainLayout.IsDarkMode ? ThemeHandler.Theme.PaletteDark.White : ThemeHandler.Theme.Palette.GrayDarker);
+      background-color: @(MainLayout.IsDarkMode ? ThemeProvider.Theme.PaletteDark.White : ThemeProvider.Theme.Palette.GrayDarker);
       border-radius: 20px;
     }
     footer hr[length=fluid] {

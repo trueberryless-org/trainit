@@ -1,6 +1,5 @@
 // Global using directives
 
-global using Model.Entities.Theme;
 global using System.Linq.Expressions;
 global using System.Security.Claims;
 global using Domain.Exceptions;

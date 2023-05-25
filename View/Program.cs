@@ -49,7 +49,7 @@ builder.Services.AddScoped<IRoleClaimRepository, RoleClaimRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
+builder.Services.AddTransient<IActivityRepository, ActivityRepository>();
 builder.Services.AddScoped<IExerciseAssetMuscleAssetRepository, ExerciseAssetMuscleAssetRepository>();
 builder.Services.AddScoped<IExerciseAssetRepository, ExerciseAssetRepository>();
 builder.Services.AddScoped<IExerciseMuscleAssetRepository, ExerciseMuscleAssetRepository>();
@@ -61,12 +61,12 @@ builder.Services.AddScoped<IWorkoutAssetRepository, WorkoutAssetRepository>();
 builder.Services.AddScoped<IWorkoutExerciseRepository, WorkoutExerciseRepository>();
 builder.Services.AddScoped<IWorkoutRepository, WorkoutRepository>();
 
-builder.Services.AddScoped<IThemeHandler, ThemeHandler>();
 builder.Services.AddScoped<CircuitHandler, CircuitTracker>();
 
 builder.Services.AddScoped<EventProvider>();
 builder.Services.AddScoped<NavigationProvider>();
 builder.Services.AddScoped<DateManager>();
+builder.Services.AddScoped<ThemeProvider>();
 builder.Services.AddScoped<BrowserService>();
 
 builder.Services.AddLogging(); // the default Logger

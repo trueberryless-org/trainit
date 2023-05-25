@@ -1,6 +1,6 @@
 ﻿@inherits LayoutComponentBase
 
-<MudThemeProvider IsDarkMode="@IsDarkMode" @ref="@_mudThemeProvider"/>
+<MudThemeProvider IsDarkMode="@IsDarkMode" @ref="@_mudThemeProvider" Theme="ThemeProvider.Theme"/>
 <MudDialogProvider/>
 <MudSnackbarProvider/>
 
@@ -15,7 +15,7 @@
             </CascadingValue>
             @if (!NavigationManager.Uri.Contains("/footer"))
             {
-                <div style="height: 7rem;"></div>
+                <div style="height: 17rem;"></div>
             }
         </MudMainContent>
         <CascadingValue Value="@this">
@@ -34,7 +34,7 @@
                 <CascadingValue Value="@this">
                     @Body
                 </CascadingValue>
-                <div style="height: 7rem;"></div>
+                <div style="height: 10rem;"></div>
             </div>
             <CascadingValue Value="@this">
                 <Footer></Footer>
@@ -103,5 +103,7 @@
 
         StateHasChanged();
     }
+
+    
 
 }

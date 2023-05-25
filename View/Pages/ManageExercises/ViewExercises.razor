@@ -9,36 +9,53 @@
             <MudStack Spacing="8">
                 <div>
                     <h1 class="ms-4">Exercises</h1>
-                    <h5 class="ms-4">Count: @(Exercises != null ? Exercises.Count : 0)</h5>
                 </div>
                 <MudDivider/>
             </MudStack>
 
             <DataInit Data="Exercises">
                 <ChildContent Context="exercises">
-                    <MudList Clickable="true">
+                    <MudPaper Elevation="3" Style="margin-block: 1rem; padding: 1rem; border-radius: 30px;">
+                        <MudGrid>
+                            <MudItem xs="4" Style="display: flex; align-items: center;">
+                                <h3 class="ms-4">@exercises.Count Entries</h3>
+                            </MudItem>
+                            <MudItem xs="8" Style="display: flex; align-items: center; justify-content: end">
+                                <MudIconButton OnClick="ExpandAll" Icon="@Icons.Material.Rounded.ArrowDropDownCircle" Color="Color.Tertiary" aria-label="expand all" Class="expand-all-button"></MudIconButton>
+                            </MudItem>
+                        </MudGrid>
+                    </MudPaper>
+                    <MudExpansionPanels @ref="_expansionPanels" Class="expansion-list" DisableBorders="true" MultiExpansion="MultiExpand">
                         @foreach (var exercise in exercises)
                         {
-                            <MudListItem>
-                                <MudGrid Style="min-height: 4rem;">
-                                    <MudItem xs="10" Style="display: flex; align-items: center;">
-                                        @exercise.Name
-                                    </MudItem>
-                                    <MudItem xs="2" Style="display: flex; align-items: center; justify-content: end">
-                                        <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="() => EditExercise(exercise.Id)"/>
-                                    </MudItem>
-                                </MudGrid>
-
-                            </MudListItem>
+                            <MudExpansionPanel Class="expansion-list-item">
+                                <TitleContent>
+                                    <MudGrid>
+                                        <MudItem xs="12" Style="display: flex; align-items: center; font-weight: 900">
+                                            @exercise.Name
+                                        </MudItem>
+                                    </MudGrid>
+                                </TitleContent>
+                                <ChildContent>
+                                    <MudGrid>
+                                        <MudItem xs="10" Style="display: flex; align-items: center;">
+                                            <div class="truncate">@exercise.Description</div>
+                                        </MudItem>
+                                        <MudItem xs="2" Style="display: flex; align-items: center; justify-content: end">
+                                            <MudIconButton Icon="@Icons.Filled.Edit" Color="Color.Secondary" OnClick="() => EditExercise(exercise.Id)"/>
+                                        </MudItem>
+                                    </MudGrid>
+                                </ChildContent>
+                            </MudExpansionPanel>
                         }
-                    </MudList>
+                    </MudExpansionPanels>
                 </ChildContent>
             </DataInit>
 
         </MudContainer>
 
         <div Style="position: fixed; bottom: 13vh; right: 2vh;">
-            <MudFab Color="Color.Info" StartIcon="@Icons.Material.Filled.Add" OnClick="NewExercise"/>
+            <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="NewExercise"/>
         </div>
 
     </Authorized>
@@ -69,5 +86,121 @@
             Exercises = await ExerciseRepository.GetExercisesByUser(UserService.CurrentUser!.Id);
         }
     }
+    
+    
+    private MudExpansionPanels? _expansionPanels;
+    private bool MultiExpand = false;
 
+    private void ExpandAll()
+    {
+        MultiExpand = !MultiExpand;
+        if (MultiExpand)
+            _expansionPanels.ExpandAll();
+        else
+            _expansionPanels.CollapseAll();
+        StateHasChanged();
+    }
+
+}
+
+@if (MultiExpand)
+{
+    <style>
+        .expand-all-button {
+            transform: rotate(-180deg);
+        }
+    </style>
+}
+
+<style>
+    .expand-all-button {
+        transition: transform 300ms ease-in-out;
+    }
+    
+    .truncate {
+       overflow: hidden;
+       text-overflow: ellipsis;
+       display: -webkit-box;
+       -webkit-line-clamp: 2; /* number of lines to show */
+               line-clamp: 2;
+       -webkit-box-orient: vertical;
+    }
+
+    .expansion-list {
+        margin-top: .5rem;
+    }
+    
+    .expansion-list-item {   
+        padding: 0;
+        border-radius: 3px;
+        margin-bottom: 0 !important;
+        transition: all 300ms ease-in-out;
+    }
+    
+    .expansion-list-item:not(:first-of-type) {
+        margin-top: .3rem;
+    }
+    
+    .expansion-list-item:first-of-type {
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+    }
+    
+    .expansion-list-item:last-of-type {
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+    }
+    
+    .expansion-list-item.mud-panel-expanded {
+        margin-block: .5rem !important;    
+    }
+           
+    
+    .expansion-list-item:first-of-type.mud-panel-expanded {
+        border-bottom-left-radius: 15px !important;
+        border-bottom-right-radius: 15px !important;
+    }
+    
+    .expansion-list-item:not(:first-of-type):not(:last-of-type).mud-panel-expanded {
+        border-radius: 15px !important;
+    }
+        
+    .expansion-list-item:last-of-type.mud-panel-expanded {
+        border-top-left-radius: 15px !important;
+        border-top-right-radius: 15px !important;
+    }
+    
+    .expansion-list-item:has(+ .mud-panel-expanded) {
+        border-bottom-left-radius: 15px !important;
+        border-bottom-right-radius: 15px !important;
+    }
+    
+    .mud-panel-expanded + .expansion-list-item {
+        border-top-left-radius: 15px !important;
+        border-top-right-radius: 15px !important;
+    }
+    
+    .mud-expand-panel-content {
+        padding: 0 1rem 1rem 1.5rem !important;
+    }
+    
+    .mud-expand-panel-header .mud-expand-panel-text {
+        transition: all 300ms ease-in-out;
+    }
+    
+    .mud-panel-expanded .mud-expand-panel-header .mud-expand-panel-text {
+        color: @ThemeProvider.Theme.Palette.Tertiary;
+        font-weight: 900;
+        font-size: 1.5rem;
+        margin-top: .5rem;
+    }
+</style>
+
+@if (!MultiExpand)
+{
+    <style>
+        .expansion-list-item.mud-panel-expanded {
+            border: 3px @ThemeProvider.Theme.Palette.Secondary solid;
+        }
+    </style>
 }

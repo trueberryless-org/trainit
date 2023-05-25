@@ -12,7 +12,7 @@
                     <MudExpansionPanel @bind-IsExpanded="changeUsernameIsOpen" HideIcon="true">
                         <TitleContent>
                             <div class="d-flex">
-                                <MudText Class="mt-1">Change <span Style="@($"color:{(MainLayout.IsDarkMode ? ThemeHandler.Theme.PaletteDark.Warning : ThemeHandler.Theme.Palette.Secondary)};")">@(changeUsernameIsOpen ? UserService.CurrentUser!.Username : "Username")</span></MudText>
+                                <MudText Class="mt-1">Change <span Style="@($"color:{(MainLayout.IsDarkMode ? ThemeProvider.Theme.PaletteDark.Warning : ThemeProvider.Theme.Palette.Secondary)};")">@(changeUsernameIsOpen ? UserService.CurrentUser!.Username : "Username")</span></MudText>
                                 <MudIcon Icon="@Icons.Material.Filled.ShortText" Color="Color.Default" Class="d-flex ml-auto"/>
                             </div>
                         </TitleContent>
@@ -52,7 +52,7 @@
                     <MudExpansionPanel @bind-IsExpanded="changeEmailIsOpen" HideIcon="true">
                         <TitleContent>
                             <div class="d-flex">
-                                <MudText Class="mt-1">Change <span Style="@($"color:{(MainLayout.IsDarkMode ? ThemeHandler.Theme.PaletteDark.Warning : ThemeHandler.Theme.Palette.Secondary)};")">@(changeEmailIsOpen ? UserService.CurrentUser!.Email : "E-Mail")</span></MudText>
+                                <MudText Class="mt-1">Change <span Style="@($"color:{(MainLayout.IsDarkMode ? ThemeProvider.Theme.PaletteDark.Warning : ThemeProvider.Theme.Palette.Secondary)};")">@(changeEmailIsOpen ? UserService.CurrentUser!.Email : "E-Mail")</span></MudText>
                                 <MudIcon Icon="@Icons.Material.Filled.Email" Color="Color.Default" Class="d-flex ml-auto"/>
                             </div>
                         </TitleContent>
@@ -98,7 +98,7 @@
                     <MudExpansionPanel @bind-IsExpanded="changePasswordIsOpen" HideIcon="true">
                         <TitleContent>
                             <div class="d-flex">
-                                <MudText Class="mt-1">Change <span Style="@($"color:{(MainLayout.IsDarkMode ? ThemeHandler.Theme.PaletteDark.Warning : ThemeHandler.Theme.Palette.Secondary)};")">Password</span></MudText>
+                                <MudText Class="mt-1">Change <span Style="@($"color:{(MainLayout.IsDarkMode ? ThemeProvider.Theme.PaletteDark.Warning : ThemeProvider.Theme.Palette.Secondary)};")">Password</span></MudText>
                                 <MudIcon Icon="@Icons.Material.Filled.Password" Color="Color.Default" Class="d-flex ml-auto"/>
                             </div>
                         </TitleContent>
@@ -152,7 +152,7 @@
 
                 <MudPaper class="px-4 py-1" Elevation="3">
                     <div style="display: flex; justify-content: space-between; align-items: center; min-height: 4rem">
-                        <div Style="@($"color:{(MainLayout.IsDarkMode ? ThemeHandler.Theme.PaletteDark.Warning : ThemeHandler.Theme.Palette.Secondary)};")">Theme Mode:</div>
+                        <div Style="@($"color:{(MainLayout.IsDarkMode ? ThemeProvider.Theme.PaletteDark.Warning : ThemeProvider.Theme.Palette.Secondary)};")">Theme Mode:</div>
                         <MudCheckBox T="bool?" CheckedChanged="ToggleTheme" Checked="IsDarkMode" TriState="true" Color="Color.Secondary">
                             @(IsDarkMode == null ? "Auto" : (IsDarkMode == true) ? "Dark" : "Light")
                         </MudCheckBox>

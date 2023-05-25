@@ -9,7 +9,7 @@
                 <h1 class="ms-4 mb-12">Profile</h1>
 
                 <MudPaper class="pa-4" Elevation="3">
-                    <div Style="@($"color:{(MainLayout.IsDarkMode ? ThemeHandler.Theme.PaletteDark.Warning : ThemeHandler.Theme.Palette.Secondary)};")">Username:</div>
+                    <div Style="@($"color:{(MainLayout.IsDarkMode ? ThemeProvider.Theme.PaletteDark.Warning : ThemeProvider.Theme.Palette.Secondary)};")">Username:</div>
                     @if (UserService.CurrentUser != null)
                     {
                         <p style="font-size: clamp(1rem, 20px, 2rem);">
@@ -25,7 +25,7 @@
                 </MudPaper>
 
                 <MudPaper class="pa-4" Elevation="3">
-                    <div Style="@($"color:{(MainLayout.IsDarkMode ? ThemeHandler.Theme.PaletteDark.Warning : ThemeHandler.Theme.Palette.Secondary)};")">E-Mail Address:</div>
+                    <div Style="@($"color:{(MainLayout.IsDarkMode ? ThemeProvider.Theme.PaletteDark.Warning : ThemeProvider.Theme.Palette.Secondary)};")">E-Mail Address:</div>
 
                     @if (UserService.CurrentUser != null)
                     {

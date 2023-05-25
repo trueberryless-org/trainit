@@ -25,7 +25,6 @@
 @using Model
 @using Model.Configuration
 @using Model.Entities
-@using Model.Entities.Theme
 
 @using View
 @using View.Components
@@ -62,9 +61,9 @@
 @inject ILogger<Login> Logger
 @inject ISnackbar Snackbar
 @inherits CancellationComponent
-@inject IThemeHandler ThemeHandler
 @inject ProtectedLocalStorage ProtectedLocalStorage
 
 @inject EventProvider EventProvider
 @inject DateManager DateManager
+@inject ThemeProvider ThemeProvider
 @inject NavigationProvider NavigationProvider

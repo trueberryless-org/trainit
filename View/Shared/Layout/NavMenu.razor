@@ -2,12 +2,12 @@
            Class="side-menu"
            Elevation="0"
            MiniWidth="100px"
-           OpenMiniOnHover="ThemeHandler.SideOpenMini"
+           OpenMiniOnHover="ThemeProvider.SideOpenMini"
            Variant="DrawerVariant.Mini"
            Width="280px"
-           OpenChanged="@(value => {if (ThemeHandler.SideOpenMini) { ThemeHandler.SideOpen = value; } })"
+           OpenChanged="@(value => {if (ThemeProvider.SideOpenMini) { ThemeProvider.SideOpen = value; } })"
            DisableOverlay="true"
-           Open="ThemeHandler.SideOpen">
+           Open="ThemeProvider.SideOpen">
     <MudDrawerHeader Class="align-center d-flex justify-center pa-0 mb-2 mt-2">
         <MudIconButton Color="Color.Primary"
                        Icon="@Icons.Filled.Home"
@@ -74,20 +74,20 @@
 
     public async Task ToggleSideMenu()
     {
-        switch (ThemeHandler.ESideMenuState)
+        switch (ThemeProvider.ESideMenuState)
         {
             case ESideMenuState.Maximized:
-                ThemeHandler.UpdateSideMenu(ESideMenuState.Responsive);
+                ThemeProvider.UpdateSideMenu(ESideMenuState.Responsive);
                 ToggleIcon = Icons.Material.Filled.ArrowDropDownCircle;
                 ToggleText = "Responsive";
                 break;
             case ESideMenuState.Responsive:
-                ThemeHandler.UpdateSideMenu(ESideMenuState.Minimized);
+                ThemeProvider.UpdateSideMenu(ESideMenuState.Minimized);
                 ToggleIcon = Icons.Material.Filled.ArrowCircleLeft;
                 ToggleText = "Minimized";
                 break;
             case ESideMenuState.Minimized:
-                ThemeHandler.UpdateSideMenu(ESideMenuState.Maximized);
+                ThemeProvider.UpdateSideMenu(ESideMenuState.Maximized);
                 ToggleIcon = Icons.Material.Filled.ArrowCircleRight;
                 ToggleText = "Maximized";
                 break;
@@ -107,7 +107,7 @@
     }
     
     .icon-hover:hover .mud-icon-root {
-        fill: @(MainLayout.IsDarkMode ? ThemeHandler.Theme.PaletteDark.Secondary : ThemeHandler.Theme.Palette.SecondaryDarken);
+        fill: @(MainLayout.IsDarkMode ? ThemeProvider.Theme.PaletteDark.Secondary : ThemeProvider.Theme.Palette.SecondaryDarken);
     }
     
     .mud-nav-link {
@@ -116,16 +116,16 @@
     }
     
     .mud-nav-link:hover {
-        color: @(MainLayout.IsDarkMode ? ThemeHandler.Theme.PaletteDark.Secondary : ThemeHandler.Theme.Palette.SecondaryDarken);
+        color: @(MainLayout.IsDarkMode ? ThemeProvider.Theme.PaletteDark.Secondary : ThemeProvider.Theme.Palette.SecondaryDarken);
         background-color: blue;
     }
     
     .mud-navmenu.mud-navmenu-default .mud-nav-link.active:not(.mud-nav-link-disabled) {
-        background-color: rgba(@(MainLayout.IsDarkMode ? ThemeHandler.Theme.PaletteDark.Primary : ThemeHandler.Theme.Palette.PrimaryDarken), 0.1);
-        border-right: 3px solid @(MainLayout.IsDarkMode ? ThemeHandler.Theme.PaletteDark.Primary : ThemeHandler.Theme.Palette.PrimaryDarken);
+        background-color: rgba(@(MainLayout.IsDarkMode ? ThemeProvider.Theme.PaletteDark.Primary : ThemeProvider.Theme.Palette.PrimaryDarken), 0.1);
+        border-right: 3px solid @(MainLayout.IsDarkMode ? ThemeProvider.Theme.PaletteDark.Primary : ThemeProvider.Theme.Palette.PrimaryDarken);
     }
     
     .side-menu {
-        border-right: 1px solid rgba(@(MainLayout.IsDarkMode ? ThemeHandler.Theme.PaletteDark.Secondary : ThemeHandler.Theme.Palette.SecondaryDarken), 0.4);
+        border-right: 1px solid rgba(@(MainLayout.IsDarkMode ? ThemeProvider.Theme.PaletteDark.Secondary : ThemeProvider.Theme.Palette.SecondaryDarken), 0.4);
     }
 </style>

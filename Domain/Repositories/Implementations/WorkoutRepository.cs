@@ -21,7 +21,11 @@ public class WorkoutRepository : ARepository<Workout>, IWorkoutRepository
 
     public async Task<List<Workout>> GetWorkoutsByUser(int userId, CancellationToken ct = default)
     {
-        return await Table.Where(w => w.UserId == userId).ToListAsync(cancellationToken: ct);
+        return await Table
+            .Where(w => w.UserId == userId)
+            .Include(w => w.WorkoutExercises)
+            .ThenInclude(we => we.Exercise)
+            .ToListAsync(cancellationToken: ct);
     }
 
     public async Task<List<Workout>> GetWorkoutsByExercise(int exerciseId, CancellationToken ct = default)

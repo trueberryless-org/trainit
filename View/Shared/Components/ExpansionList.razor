@@ -1,0 +1,100 @@
+﻿@using System.Collections
+@*<DataInit Data="List">
+    <ChildContent Context="list">
+        <MudPaper Elevation="3" Style="margin-top: 1rem; padding: 1rem; border-radius: 20px;">
+            <h3 class="ms-4">Count: @list.Count</h3>
+        </MudPaper>
+        <MudExpansionPanels Class="expansion-list" DisableBorders="true">
+            @foreach (var item in list)
+            {
+                <MudExpansionPanel Class="expansion-list-item">
+                    <TitleContent>
+                        <MudGrid Style="min-height: 4rem;">
+                            <MudItem xs="7" Style="display: flex; align-items: center;">
+                                @item.Exercise.Name
+                            </MudItem>
+                            <MudItem xs="3" Style="display: flex; align-items: center; justify-content: end">
+                                @Math.Round(item.Weight, 2) kg
+                            </MudItem>
+                        </MudGrid>
+                    </TitleContent>
+                    <ChildContent>
+                        <MudGrid Style="min-height: 4rem;">
+                            <MudItem xs="7" Style="display: flex; align-items: center;">
+                                @item.Exercise.Name
+                            </MudItem>
+                            <MudItem xs="3" Style="display: flex; align-items: center; justify-content: end">
+                                @(item.Repetition)x
+                            </MudItem>
+                            <MudItem xs="2" Style="display: flex; align-items: center; justify-content: end">
+                                <MudIconButton Icon="@Icons.Filled.Edit" OnClick="() => EditActivity(item.Id)"/>
+                            </MudItem>
+                        </MudGrid>
+                    </ChildContent>
+                </MudExpansionPanel>
+            }
+        </MudExpansionPanels>
+
+    </ChildContent>
+</DataInit>*@
+
+@code {
+    [Parameter]
+    public List<object> List { get; set; } 
+}
+
+<style>
+    .expansion-list {
+        margin-top: .5rem;
+    }
+    
+    .expansion-list-item {   
+        padding: 0;
+        border-radius: 3px;
+        margin-bottom: 0 !important;
+        transition: all 300ms ease-in-out;
+    }
+    
+    .expansion-list-item:not(:first-of-type) {
+        margin-top: .3rem;
+    }
+    
+    .expansion-list-item:first-of-type {
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+    }
+    
+    .expansion-list-item:last-of-type {
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+    }
+    
+    .expansion-list-item.mud-panel-expanded {
+        margin-block: .5rem !important;    
+    }
+           
+    
+    .expansion-list-item:first-of-type.mud-panel-expanded {
+        border-bottom-left-radius: 15px !important;
+        border-bottom-right-radius: 15px !important;
+    }
+    
+    .expansion-list-item:not(:first-of-type):not(:last-of-type).mud-panel-expanded {
+        border-radius: 15px !important;
+    }
+        
+    .expansion-list-item:last-of-type.mud-panel-expanded {
+        border-top-left-radius: 15px !important;
+        border-top-right-radius: 15px !important;
+    }
+    
+    .expansion-list-item:has(+ .mud-panel-expanded) {
+        border-bottom-left-radius: 15px !important;
+        border-bottom-right-radius: 15px !important;
+    }
+    
+    .mud-panel-expanded + .expansion-list-item {
+        border-top-left-radius: 15px !important;
+        border-top-right-radius: 15px !important;
+    }
+</style>
