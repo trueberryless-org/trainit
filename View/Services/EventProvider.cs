@@ -1,4 +1,6 @@
-﻿namespace View.Services;
+﻿using System.Reflection;
+
+namespace View.Services;
 
 public sealed class EventProvider
 {

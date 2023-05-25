@@ -18,8 +18,7 @@ public class DateManager
         {
             if (value == _selectedDate) return;
             _selectedDate = value;
-            
-            Console.WriteLine("oh no");
+        
             // raise event
             _eventProvider.OnSelectedDateChanged();
         }

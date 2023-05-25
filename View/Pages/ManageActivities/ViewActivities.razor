@@ -14,7 +14,7 @@
 
                 <MudCardActions>
                     <MudIconButton OnClick="DateManager.PrevDate" Icon="@Icons.Material.Filled.ArrowBackIos" aria-label="previous day"></MudIconButton>
-                    <MudDatePicker Label="Choose date" @ref="DateManager.DatePicker" Date="DatePickerDate" AutoClose="true" MaxDate="DateTime.Today" PickerVariant="PickerVariant.Dialog" class="mx-4">
+                    <MudDatePicker Label="Choose date" @ref="DateManager.DatePicker" @bind-Date="DateManager.SelectedDate" AutoClose="true" MaxDate="DateTime.Today" PickerVariant="PickerVariant.Dialog" class="mx-4">
                         <PickerActions Context="_">
                             <MudButton Class="mr-auto align-self-start" OnClick="DateManager.DatePickerToday">Today</MudButton>
                         </PickerActions>
@@ -70,8 +70,6 @@
 
 @code {
 
-    DateTime? DatePickerDate;
-
     List<Activity> Activities { get; set; } = null!;
 
     private async Task ReloadActivities(object? sender, EventArgs e)
@@ -79,14 +77,8 @@
         if (!UserService.IsAuthenticated().Result) return;
         if (DateManager.SelectedDate == null || !DateManager.SelectedDate.HasValue) return;
 
-        Console.WriteLine("Hello?");
         Activities = await ActivityRepository.GetActivitiesByUserByDate(UserService.CurrentUser.Id, DateManager.SelectedDate.Value);
         StateHasChanged();
-    }
-
-    private async Task SetDatePickerDate(object? sender, EventArgs e)
-    {
-        DatePickerDate = DateManager.SelectedDate;
     }
 
     private void EditActivity(int activityId)
@@ -104,11 +96,12 @@
         if (!await UserService.IsAuthenticated()) return;
         if (DateManager.SelectedDate == null || !DateManager.SelectedDate.HasValue) return;
 
-        DatePickerDate = DateManager.SelectedDate;
         Activities = await ActivityRepository.GetActivitiesByUserByDate(UserService.CurrentUser.Id, DateManager.SelectedDate.Value);
 
+        // TODO make sure reload only registered once
         EventProvider.SelectedDateChanged += new EventHandler((sender, e) => ReloadActivities(sender, e));
-        EventProvider.SelectedDateChanged += new EventHandler((sender, e) => SetDatePickerDate(sender, e));
     }
+    
+    
 
 }
