@@ -5,6 +5,7 @@ namespace View.Services;
 public sealed class EventProvider
 {
     public event EventHandler? SelectedDateChanged;
+    public bool ReloadActivitiesSubscribed = false;
 
     public void OnSelectedDateChanged()
     {

@@ -91,7 +91,7 @@
 
 @code {
 
-    List<Activity> Activities { get; set; } = null!;
+    List<Activity> Activities { get; set; }
 
     private async Task ReloadActivities(object? sender, EventArgs e)
     {
@@ -100,6 +100,11 @@
 
         Activities = await ActivityRepository.GetActivitiesByUserByDate(UserService.CurrentUser.Id, DateManager.SelectedDate.Value);
         StateHasChanged();
+
+        Console.WriteLine("Activity - Reload Completed");
+        Console.WriteLine(DateManager.SelectedDate.Value);
+        Console.WriteLine(Activities.Count);
+        Console.WriteLine(string.Join(", ", Activities.Select(a => a.Exercise.Name)));
     }
 
     private void EditActivity(int activityId)
@@ -112,15 +117,22 @@
         NavigationManager.NavigateTo(NavigationProvider["NewActivity"].Link);
     }
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
         if (!await UserService.IsAuthenticated()) return;
-        if (DateManager.SelectedDate == null || !DateManager.SelectedDate.HasValue) return;
 
-        Activities = await ActivityRepository.GetActivitiesByUserByDate(UserService.CurrentUser.Id, DateManager.SelectedDate.Value);
+        await ReloadActivities(this, EventArgs.Empty);
 
     // TODO make sure reload only registered once
-        EventProvider.SelectedDateChanged += new EventHandler((sender, e) => ReloadActivities(sender, e));
+    /*if (!EventProvider.ReloadActivitiesSubscribed)
+        {
+            EventProvider.SelectedDateChanged += new EventHandler(async (sender, e) => await ReloadActivities(sender, e));
+            EventProvider.ReloadActivitiesSubscribed = true;
+        }*/
+
+        EventProvider.SelectedDateChanged += new EventHandler(async (sender, e) => await ReloadActivities(sender, e));
+
+        Console.WriteLine("Activity");
     }
 
 
@@ -216,7 +228,7 @@
     }
     
     .mud-panel-expanded .mud-expand-panel-header .mud-expand-panel-text {
-        color: @ThemeProvider.Theme.Palette.Tertiary;
+        /*color: @ThemeProvider.Theme.Palette.Tertiary;*/
         font-weight: 900;
         font-size: 1.5rem;
         margin-top: .5rem;

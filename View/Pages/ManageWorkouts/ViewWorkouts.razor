@@ -86,6 +86,8 @@
         {
             Workouts = await WorkoutRepository.GetWorkoutsByUser(UserService.CurrentUser!.Id);
         }
+        
+        Console.WriteLine("Workout");
     }
     
     

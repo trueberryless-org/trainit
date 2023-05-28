@@ -85,6 +85,8 @@
         {
             Exercises = await ExerciseRepository.GetExercisesByUser(UserService.CurrentUser!.Id);
         }
+
+        Console.WriteLine("Exercise");
     }
     
     
