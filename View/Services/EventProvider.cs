@@ -1,15 +1,23 @@
 ﻿using System.Reflection;
+using Microsoft.AspNetCore.Components;
 
 namespace View.Services;
 
 public sealed class EventProvider
 {
-    public event EventHandler? SelectedDateChanged;
-    public bool ReloadActivitiesSubscribed = false;
+    public EventCallback? SelectedDateChanged { get; set; }
 
-    public void OnSelectedDateChanged()
+    public void RegisterSelectedDateChanged(EventCallback callback)
     {
-        SelectedDateChanged?.Invoke(this, EventArgs.Empty);
+        SelectedDateChanged = callback;
+    }
+
+    public async Task OnSelectedDateChanged()
+    {
+        if (SelectedDateChanged != null && SelectedDateChanged.Value.HasDelegate)
+        {
+            await SelectedDateChanged.Value.InvokeAsync();
+        }
     }
     
     public event EventHandler? ProfileMenuOpened;

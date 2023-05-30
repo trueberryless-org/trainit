@@ -93,7 +93,7 @@
 
     List<Activity> Activities { get; set; }
 
-    private async Task ReloadActivities(object? sender, EventArgs e)
+    private async Task ReloadActivities()
     {
         if (!UserService.IsAuthenticated().Result) return;
         if (DateManager.SelectedDate == null || !DateManager.SelectedDate.HasValue) return;
@@ -121,16 +121,9 @@
     {
         if (!await UserService.IsAuthenticated()) return;
 
-        await ReloadActivities(this, EventArgs.Empty);
+        await ReloadActivities();
 
-    // TODO make sure reload only registered once
-    /*if (!EventProvider.ReloadActivitiesSubscribed)
-        {
-            EventProvider.SelectedDateChanged += new EventHandler(async (sender, e) => await ReloadActivities(sender, e));
-            EventProvider.ReloadActivitiesSubscribed = true;
-        }*/
-
-        EventProvider.SelectedDateChanged += new EventHandler(async (sender, e) => await ReloadActivities(sender, e));
+        EventProvider.RegisterSelectedDateChanged(new EventCallback(this, (Func<Task>)ReloadActivities));
 
         Console.WriteLine("Activity");
     }

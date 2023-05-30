@@ -20,6 +20,7 @@ public class DateManager
             _selectedDate = value;
         
             // raise event
+            // _eventProvider.OnSelectedDateChanged();
             _eventProvider.OnSelectedDateChanged();
         }
     }
