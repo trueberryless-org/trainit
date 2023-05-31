@@ -31,7 +31,7 @@
                                 <h3 class="ms-4">@activities.Count Entries</h3>
                             </MudItem>
                             <MudItem xs="8" Style="display: flex; align-items: center; justify-content: end">
-                                <MudIconButton OnClick="ExpandAll" Icon="@Icons.Material.Rounded.ArrowDropDownCircle" Color="Color.Tertiary" aria-label="expand all" Class="expand-all-button"></MudIconButton>
+                                <MudIconButton OnClick="ExpandAll" Icon="@Icons.Material.Rounded.ArrowDropDownCircle" Color="Color.Secondary" aria-label="expand all" Class="expand-all-button"></MudIconButton>
                             </MudItem>
                         </MudGrid>
                     </MudPaper>
@@ -90,6 +90,8 @@
 </AuthorizeView>
 
 @code {
+    [Parameter]
+    public MainLayout? MainLayout { get; set; }
 
     List<Activity> Activities { get; set; }
 
@@ -117,7 +119,7 @@
         NavigationManager.NavigateTo(NavigationProvider["NewActivity"].Link);
     }
 
-    protected override async Task OnParametersSetAsync()
+    protected override async Task OnInitializedAsync()
     {
         if (!await UserService.IsAuthenticated()) return;
 
@@ -221,7 +223,6 @@
     }
     
     .mud-panel-expanded .mud-expand-panel-header .mud-expand-panel-text {
-        /*color: @ThemeProvider.Theme.Palette.Tertiary;*/
         font-weight: 900;
         font-size: 1.5rem;
         margin-top: .5rem;
@@ -232,7 +233,7 @@
 {
     <style>
         .expansion-list-item.mud-panel-expanded {
-            border: 3px @ThemeProvider.Theme.Palette.Secondary solid;
+            border: 3px @(ThemeProvider.Theme.Palette.Secondary) solid;
         }
     </style>
 }

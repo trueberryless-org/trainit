@@ -20,7 +20,7 @@
                                 <h3 class="ms-4">@workouts.Count Entries</h3>
                             </MudItem>
                             <MudItem xs="8" Style="display: flex; align-items: center; justify-content: end">
-                                <MudIconButton OnClick="ExpandAll" Icon="@Icons.Material.Rounded.ArrowDropDownCircle" Color="Color.Tertiary" aria-label="expand all" Class="expand-all-button"></MudIconButton>
+                                <MudIconButton OnClick="ExpandAll" Icon="@Icons.Material.Rounded.ArrowDropDownCircle" Color="Color.Secondary" aria-label="expand all" Class="expand-all-button"></MudIconButton>
                             </MudItem>
                         </MudGrid>
                     </MudPaper>
@@ -59,6 +59,8 @@
 </AuthorizeView>
 
 @code {
+    [Parameter]
+    public MainLayout? MainLayout { get; set; }
 
     [Inject]
     private IDialogService DialogService { get; set; }
@@ -182,7 +184,6 @@
     }
     
     .mud-panel-expanded .mud-expand-panel-header .mud-expand-panel-text {
-        color: @ThemeProvider.Theme.Palette.Tertiary;
         font-weight: 900;
         font-size: 1.5rem;
         margin-top: .5rem;
@@ -193,7 +194,7 @@
 {
     <style>
         .expansion-list-item.mud-panel-expanded {
-            border: 3px @ThemeProvider.Theme.Palette.Secondary solid;
+            border: 3px @(ThemeProvider.Theme.Palette.Secondary) solid;
         }
     </style>
 }

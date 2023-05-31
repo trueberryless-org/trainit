@@ -56,4 +56,10 @@ public interface IActivityRepository : IRepository<Activity>
     /// <param name="userId">Id of the user you want the last training days from</param>
     /// <returns>List of DateTime</returns>
     Task<List<DateOnly>> GetLastTrainingDays(int userId, CancellationToken ct = default);
+
+    /// <summary>
+    /// Returns a list of all activities which include the exercises.
+    /// </summary>
+    /// <returns>List of Activities</returns>
+    Task<List<Activity>> GetAllActivitiesWithExercises(CancellationToken ct = default);
 }

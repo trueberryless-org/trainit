@@ -160,6 +160,26 @@ public class NavigationProvider
                 }
             },
             {
+                "Statistic",
+                new Page()
+                {
+                    Name = "Statistic",
+                    Link = "/statistic",
+                    Type = PageType.CONTENT,
+                    Icon = Icons.Material.Filled.PieChart
+                }
+            },
+            {
+                "Leaderboard",
+                new Page()
+                {
+                    Name = "Leaderboard",
+                    Link = "/leaderboard",
+                    Type = PageType.CONTENT,
+                    Icon = Icons.Material.Filled.Leaderboard
+                }
+            },
+            {
                 "Help",
                 new Page()
                 {

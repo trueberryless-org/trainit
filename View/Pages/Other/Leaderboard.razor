@@ -1,0 +1,197 @@
+﻿@page "/leaderboard"
+@using Activity = Model.Entities.per_User.Activity
+
+<PageTitle>Leaderboard</PageTitle>
+
+<MudContainer Class="mt-8">
+    <MudStack Spacing="8">
+        <div>
+            <h1 class="ms-4">Leaderboard</h1>
+        </div>
+    </MudStack>
+
+    <DataInit Data="UserInformations">
+        <ChildContent Context="users">
+            <MudPaper Elevation="3" Style="margin-block: 1rem; padding: 1rem; border-radius: 30px;">
+                <MudGrid>
+                    <MudItem xs="4" Style="display: flex; align-items: center;">
+                        <h3 class="ms-4">@users.Count Users</h3>
+                    </MudItem>
+                    <MudItem xs="8" Style="display: flex; align-items: center; justify-content: end">
+                        <MudIconButton OnClick="ExpandAll" Icon="@Icons.Material.Rounded.ArrowDropDownCircle" Color="Color.Secondary" aria-label="expand all" Class="expand-all-button"></MudIconButton>
+                    </MudItem>
+                </MudGrid>
+            </MudPaper>
+            <MudExpansionPanels @ref="_expansionPanels" Class="expansion-list" DisableBorders="true" MultiExpansion="@MultiExpand">
+                @foreach (var user in users)
+                {
+                    <MudExpansionPanel Class="expansion-list-item">
+                        <TitleContent>
+                            <MudGrid>
+                                <MudItem xs="8" Style="display: flex; align-items: center;">
+                                    @user.Username
+                                </MudItem>
+                                <MudItem xs="4" Style="display: flex; align-items: center;">
+                                    Score: @user.Score
+                                </MudItem>
+                            </MudGrid>
+                        </TitleContent>
+                        <ChildContent>
+                            <MudGrid>
+                            </MudGrid>
+                        </ChildContent>
+                    </MudExpansionPanel>
+                }
+            </MudExpansionPanels>
+
+        </ChildContent>
+    </DataInit>
+
+</MudContainer>
+
+@code {
+    List<Activity> Activities { get; set; }
+    List<User> Users { get; set; }
+
+    List<UserInformation> UserInformations { get; set; }
+
+    public struct UserInformation
+    {
+        public string Username;
+        public int Score;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+    // Activities = await ActivityRepository.GetAllActivitiesWithExercises();
+        Users = await UserRepository.ReadAsync();
+        UserInformations = new List<UserInformation>();
+
+        foreach (var user in Users)
+        {
+            var user_activities = (await ActivityRepository.GetActivitiesByUser(user.Id))
+                .Where(a => a.DateValue >= DateOnly.FromDateTime(DateTime.Now).AddDays(-7));
+            var score = (int)Math.Round(user_activities.Sum(a => a.Weight));
+
+            Console.WriteLine(user.Username + ": " + score);
+
+            UserInformations.Add(
+                new UserInformation()
+                {
+                    Username = user.Username,
+                    Score = score
+                });
+        }
+
+        UserInformations = UserInformations.OrderByDescending(u => u.Score).ToList();
+    }
+
+
+    private MudExpansionPanels? _expansionPanels;
+    private bool MultiExpand = false;
+
+    private void ExpandAll()
+    {
+        MultiExpand = !MultiExpand;
+        if (MultiExpand)
+            _expansionPanels.ExpandAll();
+        else
+            _expansionPanels.CollapseAll();
+        StateHasChanged();
+    }
+
+}
+
+
+
+@if (MultiExpand)
+{
+    <style>
+        .expand-all-button {
+            transform: rotate(-180deg);
+        }
+    </style>
+}
+
+<style>
+    .expand-all-button {
+        transition: transform 300ms ease-in-out;
+    }
+
+    .expansion-list {
+        margin-top: .5rem;
+    }
+    
+    .expansion-list-item {   
+        padding: 0;
+        border-radius: 3px;
+        margin-bottom: 0 !important;
+        transition: all 300ms ease-in-out;
+    }
+    
+    .expansion-list-item:not(:first-of-type) {
+        margin-top: .3rem;
+    }
+    
+    .expansion-list-item:first-of-type {
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+    }
+    
+    .expansion-list-item:last-of-type {
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+    }
+    
+    .expansion-list-item.mud-panel-expanded {
+        margin-block: .5rem !important;    
+    }
+           
+    
+    .expansion-list-item:first-of-type.mud-panel-expanded {
+        border-bottom-left-radius: 15px !important;
+        border-bottom-right-radius: 15px !important;
+    }
+    
+    .expansion-list-item:not(:first-of-type):not(:last-of-type).mud-panel-expanded {
+        border-radius: 15px !important;
+    }
+        
+    .expansion-list-item:last-of-type.mud-panel-expanded {
+        border-top-left-radius: 15px !important;
+        border-top-right-radius: 15px !important;
+    }
+    
+    .expansion-list-item:has(+ .mud-panel-expanded) {
+        border-bottom-left-radius: 15px !important;
+        border-bottom-right-radius: 15px !important;
+    }
+    
+    .mud-panel-expanded + .expansion-list-item {
+        border-top-left-radius: 15px !important;
+        border-top-right-radius: 15px !important;
+    }
+    
+    .mud-expand-panel-content {
+        padding: 0 1rem 1rem 1.5rem !important;
+    }
+    
+    .mud-expand-panel-header .mud-expand-panel-text {
+        transition: all 300ms ease-in-out;
+    }
+    
+    .mud-panel-expanded .mud-expand-panel-header .mud-expand-panel-text {
+        font-weight: 900;
+        font-size: 1.5rem;
+        margin-top: .5rem;
+    }
+</style>
+
+@if (!MultiExpand)
+{
+    <style>
+        .expansion-list-item.mud-panel-expanded {
+            border: 3px @(ThemeProvider.Theme.Palette.Secondary) solid;
+        }
+    </style>
+}

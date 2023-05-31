@@ -256,8 +256,8 @@
                 foreach (var exercise in Exercises)
                 {
                     float weight = lastActivities2.Find(la => la.ExerciseId == exercise.Id) == null ? default : lastActivities2.Find(la => la.ExerciseId == exercise.Id).Weight;
-                    int repetition = lastActivities2.Find(la => la.ExerciseId == exercise.Id) == null ? default : lastActivities2.Find(la => la.ExerciseId == exercise.Id).Repetition;
-                    int set = lastActivities2.Find(la => la.ExerciseId == exercise.Id) == null ? default : lastActivities2.Find(la => la.ExerciseId == exercise.Id).Set;
+                    int repetition = lastActivities2.Find(la => la.ExerciseId == exercise.Id) == null ? 10 : lastActivities2.Find(la => la.ExerciseId == exercise.Id).Repetition;
+                    int set = lastActivities2.Find(la => la.ExerciseId == exercise.Id) == null ? 3 : lastActivities2.Find(la => la.ExerciseId == exercise.Id).Set;
                     
                     newActivities2.Add(new Activity()
                     {

@@ -91,4 +91,9 @@ public class ActivityRepository : ARepository<Activity>, IActivityRepository
                 .ToListAsync(cancellationToken: ct);
 
     }
+
+    public async Task<List<Activity>> GetAllActivitiesWithExercises(CancellationToken ct = default)
+    {
+        return await Table.Include(a => a.Exercise).ToListAsync(cancellationToken: ct);
+    }
 }
