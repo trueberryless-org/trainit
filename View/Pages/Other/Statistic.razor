@@ -1,0 +1,143 @@
+﻿@page "/statistic"
+
+@using Activity = Model.Entities.per_User.Activity
+
+<PageTitle>Statistic</PageTitle>
+
+<AuthorizeView>
+    <Authorized>
+        <MudContainer Class="mt-8">
+            <MudStack Spacing="8">
+                <div>
+                    <h1 class="ms-4">Statistic</h1>
+                    @if (SelectedExercise != null)
+                    {
+                        <MudChart ChartType="ChartType.Line" ChartSeries="@Series" @bind-SelectedIndex="Index" XAxisLabels="@XAxisLabels" Width="100%" Height="350px" ChartOptions="chartOptions"></MudChart>
+                    }
+                    else
+                    {
+                        <h1 class="ms-6">Select exercise</h1>
+                    }
+
+                </div>
+            </MudStack>
+            <MudPaper class="pa-4" Elevation="3">
+                <DataInit Data="Exercises">
+                    <ChildContent Context="exercises">
+                        <MudSelect T="Exercise" @bind-value="SelectedExercise" Label="Exercise" ToStringFunc="@GetExerciseName" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+                            @foreach (var exercise in exercises)
+                            {
+                                <MudSelectItem Value="@exercise"/>
+                            }
+                        </MudSelect>
+                    </ChildContent>
+                </DataInit>
+            </MudPaper>
+            <MudPaper class="pa-4" Elevation="3">
+                <DataInit Data="times">
+                    <ChildContent Context="time">
+                        <MudSelect T="ETimeSpan" @bind-value="SelectedTimeSpan" Label="Timespan" ToStringFunc="@GetTimeName" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+                            @foreach (var time in times)
+                            {
+                                <MudSelectItem Value="@time"/>
+                            }
+                        </MudSelect>
+                    </ChildContent>
+                </DataInit>
+            </MudPaper>
+        </MudContainer>
+    </Authorized>
+</AuthorizeView>
+
+@code {
+
+    enum ETimeSpan
+    {
+        ALLTIME,
+        YEAR,
+        MONTH
+    }
+
+    List<ETimeSpan> times = new List<ETimeSpan>()
+    {
+        ETimeSpan.ALLTIME,
+        ETimeSpan.YEAR,
+        ETimeSpan.MONTH
+    };
+
+    ETimeSpan? _timeSpan;
+
+    ETimeSpan? SelectedTimeSpan
+    {
+        get => _timeSpan;
+        set
+        {
+            if (_timeSpan == value) return;
+            _timeSpan = value;
+            StateHasChanged();
+            ReloadActivities();
+        }
+    }
+
+
+    private int Index = -1;
+
+    List<Activity> Activities { get; set; }
+
+    // all Exercises from User
+    List<Exercise> Exercises { get; set; }
+
+    Exercise? _selectedExercise;
+
+    List<ChartSeries> Series = new List<ChartSeries>();
+
+    Exercise? SelectedExercise
+    {
+        get => _selectedExercise;
+        set
+        {
+            if (_selectedExercise == value) return;
+            _selectedExercise = value;
+            StateHasChanged();
+            ReloadActivities();
+        }
+    }
+
+    readonly Func<Exercise, string> GetExerciseName = e => e.Name;
+
+    readonly Func<ETimeSpan, string> GetTimeName = e => e switch
+    {
+        ETimeSpan.ALLTIME => "All time",
+        ETimeSpan.YEAR => "Year",
+        _ => "Month"
+        };
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!await UserService.IsAuthenticated()) return;
+
+        Exercises = await ExerciseRepository.ReadAsync(e => e.UserId == UserService.CurrentUser!.Id);
+    }
+
+    private async Task ReloadActivities()
+    {
+        Activities = await ActivityRepository.GetLastActivitiesByExercises(new[] { _selectedExercise.Id });
+        var current = DateOnly.FromDateTime(DateTime.Now);
+        switch (SelectedTimeSpan)
+        {
+            case ETimeSpan.YEAR:
+                Series.Add(new ChartSeries() { Name = _selectedExercise.Name, Data = Activities.Where(a => a.DateValue >= DateOnly.FromDateTime(DateTime.Now).AddYears(-1)).Select(a => (double)a.Weight).ToArray() });
+                break;
+            case ETimeSpan.MONTH:
+                Series.Add(new ChartSeries() { Name = _selectedExercise.Name, Data = Activities.Where(a => a.DateValue >= DateOnly.FromDateTime(DateTime.Now).AddMonths(-1)).Select(a => (double)a.Weight).ToArray() });
+                break;
+            default:
+                Series.Add(new ChartSeries() { Name = _selectedExercise.Name, Data = Activities.Select(a => (double)a.Weight).ToArray() });
+
+        }
+        StateHasChanged();
+    }
+
+
+}
