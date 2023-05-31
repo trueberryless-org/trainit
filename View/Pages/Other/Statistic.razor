@@ -12,7 +12,7 @@
                     <h1 class="ms-4">Statistic</h1>
                     @if (SelectedExercise != null)
                     {
-                        <MudChart ChartType="ChartType.Line" ChartSeries="@Series" @bind-SelectedIndex="Index" XAxisLabels="@XAxisLabels" Width="100%" Height="350px" ChartOptions="chartOptions"></MudChart>
+                        <MudChart ChartType="ChartType.Line" ChartSeries="@Series" @bind-SelectedIndex="Index" XAxisLabels="@XAxisLabels" Width="100%" Height="350px" ChartOptions="@chartOptions"></MudChart>
                     }
                     else
                     {
@@ -50,6 +50,9 @@
 </AuthorizeView>
 
 @code {
+    public string[] XAxisLabels { get; set; }
+
+    private ChartOptions chartOptions { get; set; }
 
     enum ETimeSpan
     {
@@ -134,10 +137,8 @@
                 break;
             default:
                 Series.Add(new ChartSeries() { Name = _selectedExercise.Name, Data = Activities.Select(a => (double)a.Weight).ToArray() });
-
+                break;
         }
         StateHasChanged();
     }
-
-
 }

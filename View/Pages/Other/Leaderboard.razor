@@ -22,16 +22,20 @@
                     </MudItem>
                 </MudGrid>
             </MudPaper>
+            <div class="d-flex justify-content-center">
+                <MudPagination Rectangular="true" Variant="Variant.Text" Count="@((int)Math.Ceiling((double)users.Count / 2))" @bind-Selected="@_pagination" BoundaryCount="2" MiddleCount="3" Style="margin-block: 1rem"/>
+            </div>
+            <MudChip Color="Color.Primary">Showing number of</MudChip>
             <MudExpansionPanels @ref="_expansionPanels" Class="expansion-list" DisableBorders="true" MultiExpansion="@MultiExpand">
                 @foreach (var user in users)
                 {
                     <MudExpansionPanel Class="expansion-list-item">
                         <TitleContent>
                             <MudGrid>
-                                <MudItem xs="8" Style="display: flex; align-items: center;">
+                                <MudItem xs="7" Style="display: flex; align-items: center;">
                                     @user.Username
                                 </MudItem>
-                                <MudItem xs="4" Style="display: flex; align-items: center;">
+                                <MudItem xs="5" Style="display: flex; align-items: center; justify-content: end; padding-right: 2rem">
                                     Score: @user.Score
                                 </MudItem>
                             </MudGrid>
@@ -50,6 +54,8 @@
 </MudContainer>
 
 @code {
+    int _pagination;
+    
     List<Activity> Activities { get; set; }
     List<User> Users { get; set; }
 
@@ -63,6 +69,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        _pagination = 1;
+        
     // Activities = await ActivityRepository.GetAllActivitiesWithExercises();
         Users = await UserRepository.ReadAsync();
         UserInformations = new List<UserInformation>();
