@@ -1,10 +1,15 @@
 ﻿using Model.Entities.Authentication;
 using Model.Entities.Authentication.Models;
+using Model.Entities.Log;
 
 namespace Domain.Repositories.Implementations;
 
 public class UserRepository : ARepository<User>, IUserRepository {
-    public UserRepository(ModelDbContext context) : base(context) {
+    private readonly ILoginRepository _loginRepository;
+
+    public UserRepository(ModelDbContext context, ILoginRepository loginRepository) : base(context)
+    {
+        _loginRepository = loginRepository;
     }
 
 
@@ -50,7 +55,23 @@ public class UserRepository : ARepository<User>, IUserRepository {
 
         if (user is null) return null;
 
-        if (!User.VerifyPassword(model.Password, user.PasswordHash)) return null!;
+        if (!User.VerifyPassword(model.Password, user.PasswordHash))
+        {
+            await _loginRepository.CreateAsync(new Login()
+            {
+                User = user,
+                LoginStatus = ELoginStatus.WRONG_PASSWORD,
+                DateTime = DateTime.Now
+            }, ct);
+            return null!;
+        }
+        
+        await _loginRepository.CreateAsync(new Login()
+        {
+            User = user,
+            LoginStatus = ELoginStatus.SUCCESS,
+            DateTime = DateTime.Now
+        }, ct);
 
         return user.ClearSensitiveData();
     }

@@ -10,10 +10,15 @@
                 <div>
                     <h1 class="ms-4">Exercises</h1>
                 </div>
+                
+                <MudTextField @bind-Value="SearchQuery" Variant="Variant.Outlined"
+                              Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Tertiary"
+                              Immediate="true" Clearable="true" Placeholder="Search query"
+                              OnKeyUp="FilterExercises" OnClearButtonClick="FilterExercises"/>
                 <MudDivider/>
             </MudStack>
 
-            <DataInit Data="Exercises">
+            <DataInit Data="FilteredExercises">
                 <ChildContent Context="exercises">
                     <MudPaper Elevation="3" Style="margin-block: 1rem; padding: 1rem; border-radius: 30px;">
                         <MudGrid>
@@ -69,7 +74,11 @@
     [Inject]
     private IDialogService DialogService { get; set; }
 
-    List<Exercise> Exercises { get; set; } = null!;
+    List<Exercise> Exercises { get; set; }
+
+    List<Exercise> FilteredExercises { get; set; }
+
+    public string? SearchQuery { get; set; }
 
     void EditExercise(int exerciseId)
     {
@@ -81,14 +90,22 @@
         NavigationManager.NavigateTo(NavigationProvider["NewExercise"].Link);
     }
 
+    private void FilterExercises()
+    {
+        if (!string.IsNullOrEmpty(SearchQuery))
+            FilteredExercises = Exercises.Where(e => FuzzySearch.IsSimilar(e.Name, SearchQuery)).ToList();
+        else
+            FilteredExercises = Exercises;
+        StateHasChanged();
+    }
+
     protected override async Task OnInitializedAsync()
     {
         if (await UserService.IsAuthenticated())
         {
             Exercises = await ExerciseRepository.GetExercisesByUser(UserService.CurrentUser!.Id);
         }
-
-        Console.WriteLine("Exercise");
+        FilterExercises();
     }
     
     

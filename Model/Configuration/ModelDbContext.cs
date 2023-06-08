@@ -24,6 +24,7 @@ public class ModelDbContext : DbContext
     public DbSet<Role> Roles { get; set; }
     public DbSet<RoleClaim> RoleClaims { get; set; }
     public DbSet<LogEntry> LogEntries { get; set; }
+    public DbSet<Login> Logins { get; set; }
     
     public ModelDbContext(DbContextOptions<ModelDbContext> options) : base(options)
     {
@@ -35,6 +36,10 @@ public class ModelDbContext : DbContext
         // ENUMS
         modelBuilder.Entity<LogEntry>()
             .Property(le => le.FieldType)
+            .HasConversion<string>();
+        
+        modelBuilder.Entity<Login>()
+            .Property(l => l.LoginStatus)
             .HasConversion<string>();
         
         // FOREIGN KEYS
@@ -122,6 +127,12 @@ public class ModelDbContext : DbContext
             .HasOne(le => le.User)
             .WithMany()
             .HasForeignKey(le => le.UserId);
+        
+        // Log
+        modelBuilder.Entity<Login>()
+            .HasOne(l => l.User)
+            .WithMany()
+            .HasForeignKey(l => l.UserId);
         
         // UNIQUE
         modelBuilder.Entity<User>()

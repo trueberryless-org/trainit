@@ -31,3 +31,10 @@ public class LogEntry
     [Column("NEW_VALUE")]
     public string NewValue { get; set; }
 }
+
+public enum ELogEntryType
+{
+    USERNAME, 
+    EMAIL,
+    PASSWORD
+}

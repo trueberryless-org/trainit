@@ -19,6 +19,126 @@ namespace Model.Migrations
                 .HasAnnotation("ProductVersion", "7.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("Model.Entities.Assets.ExerciseAsset", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("EXERCISE_ASSET_ID");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext")
+                        .HasColumnName("DESCRIPTION");
+
+                    b.Property<int?>("MachineAssetId")
+                        .HasColumnType("int")
+                        .HasColumnName("MACHINE_ASSET_ID");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("NAME");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MachineAssetId");
+
+                    b.ToTable("EXERCISE_ASSETS");
+                });
+
+            modelBuilder.Entity("Model.Entities.Assets.ExerciseAssetMuscleAsset", b =>
+                {
+                    b.Property<int>("ExerciseAssetId")
+                        .HasColumnType("int")
+                        .HasColumnName("EXERCISE_ASSET_ID");
+
+                    b.Property<int>("MuscleAssetId")
+                        .HasColumnType("int")
+                        .HasColumnName("MUSCLE_ASSET_ID");
+
+                    b.HasKey("ExerciseAssetId", "MuscleAssetId");
+
+                    b.HasIndex("MuscleAssetId");
+
+                    b.ToTable("EXERCISE_ASSET_HAS_MUSCLE_ASSETS_JT");
+                });
+
+            modelBuilder.Entity("Model.Entities.Assets.MachineAsset", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("MACHINE_ASSET_ID");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("NAME");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MACHINE_ASSETS");
+                });
+
+            modelBuilder.Entity("Model.Entities.Assets.MuscleAsset", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("MUSCLE_ASSET_ID");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("NAME");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MUSCLE_ASSETS");
+                });
+
+            modelBuilder.Entity("Model.Entities.Assets.WorkoutAsset", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("WORKOUT_ASSET_ID");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext")
+                        .HasColumnName("DESCRIPTION");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("NAME");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("WORKOUT_ASSETS");
+                });
+
+            modelBuilder.Entity("Model.Entities.Assets.WorkoutAssetExerciseAsset", b =>
+                {
+                    b.Property<int>("WorkoutAssetId")
+                        .HasColumnType("int")
+                        .HasColumnName("WORKOUT_ASSET_ID");
+
+                    b.Property<int>("ExerciseAssetId")
+                        .HasColumnType("int")
+                        .HasColumnName("EXERCISE_ASSET_ID");
+
+                    b.HasKey("WorkoutAssetId", "ExerciseAssetId");
+
+                    b.HasIndex("ExerciseAssetId");
+
+                    b.ToTable("WORKOUT_ASSET_HAS_EXERCISE_ASSETS_JT");
+                });
+
             modelBuilder.Entity("Model.Entities.Authentication.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -135,6 +255,208 @@ namespace Model.Migrations
                     b.ToTable("LOG_ENTRIES");
                 });
 
+            modelBuilder.Entity("Model.Entities.Log.Login", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("LoginStatus")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("UserId")
+                        .IsRequired()
+                        .HasColumnType("int")
+                        .HasColumnName("USER_ID");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("LOGINS");
+                });
+
+            modelBuilder.Entity("Model.Entities.per_User.Activity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ACTIVITY_ID");
+
+                    b.Property<DateOnly>("DateValue")
+                        .HasColumnType("date")
+                        .HasColumnName("DATE");
+
+                    b.Property<int>("ExerciseId")
+                        .HasColumnType("int")
+                        .HasColumnName("EXERCISE_ID");
+
+                    b.Property<int>("Repetition")
+                        .HasColumnType("int")
+                        .HasColumnName("REPETITION");
+
+                    b.Property<int>("Set")
+                        .HasColumnType("int")
+                        .HasColumnName("SET");
+
+                    b.Property<float>("Weight")
+                        .HasColumnType("float")
+                        .HasColumnName("WEIGHT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExerciseId");
+
+                    b.ToTable("ACTIVITIES");
+                });
+
+            modelBuilder.Entity("Model.Entities.per_User.Exercise", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("EXERCISE_ID");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext")
+                        .HasColumnName("DESCRIPTION");
+
+                    b.Property<int?>("MachineAssetId")
+                        .HasColumnType("int")
+                        .HasColumnName("MACHINE_ASSET_ID");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("NAME");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("USER_ID");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MachineAssetId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("EXERCISES");
+                });
+
+            modelBuilder.Entity("Model.Entities.per_User.ExerciseMuscleAsset", b =>
+                {
+                    b.Property<int>("ExerciseId")
+                        .HasColumnType("int")
+                        .HasColumnName("EXERCISE_ID");
+
+                    b.Property<int>("MuscleAssetId")
+                        .HasColumnType("int")
+                        .HasColumnName("MUSCLE_ASSET_ID");
+
+                    b.HasKey("ExerciseId", "MuscleAssetId");
+
+                    b.HasIndex("MuscleAssetId");
+
+                    b.ToTable("EXERCISE_HAS_MUSCLE_ASSETS_JT");
+                });
+
+            modelBuilder.Entity("Model.Entities.per_User.Workout", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("WORKOUT_ID");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext")
+                        .HasColumnName("DESCRIPTION");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("NAME");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("USER_ID");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("WORKOUTS");
+                });
+
+            modelBuilder.Entity("Model.Entities.per_User.WorkoutExercise", b =>
+                {
+                    b.Property<int>("ExerciseId")
+                        .HasColumnType("int")
+                        .HasColumnName("EXERCISE_ID");
+
+                    b.Property<int>("WorkoutId")
+                        .HasColumnType("int")
+                        .HasColumnName("WORKOUT_ID");
+
+                    b.HasKey("ExerciseId", "WorkoutId");
+
+                    b.HasIndex("WorkoutId");
+
+                    b.ToTable("WORKOUT_HAS_EXERCISES_JT");
+                });
+
+            modelBuilder.Entity("Model.Entities.Assets.ExerciseAsset", b =>
+                {
+                    b.HasOne("Model.Entities.Assets.MachineAsset", "MachineAsset")
+                        .WithMany("ExerciseAssets")
+                        .HasForeignKey("MachineAssetId");
+
+                    b.Navigation("MachineAsset");
+                });
+
+            modelBuilder.Entity("Model.Entities.Assets.ExerciseAssetMuscleAsset", b =>
+                {
+                    b.HasOne("Model.Entities.Assets.ExerciseAsset", "ExerciseAsset")
+                        .WithMany("ExerciseAssetMuscleAssets")
+                        .HasForeignKey("ExerciseAssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Model.Entities.Assets.MuscleAsset", "MuscleAsset")
+                        .WithMany("ExerciseAssetMuscleAssets")
+                        .HasForeignKey("MuscleAssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ExerciseAsset");
+
+                    b.Navigation("MuscleAsset");
+                });
+
+            modelBuilder.Entity("Model.Entities.Assets.WorkoutAssetExerciseAsset", b =>
+                {
+                    b.HasOne("Model.Entities.Assets.ExerciseAsset", "ExerciseAsset")
+                        .WithMany("WorkoutAssetExerciseAssets")
+                        .HasForeignKey("ExerciseAssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Model.Entities.Assets.WorkoutAsset", "WorkoutAsset")
+                        .WithMany("WorkoutAssetExerciseAssets")
+                        .HasForeignKey("WorkoutAssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ExerciseAsset");
+
+                    b.Navigation("WorkoutAsset");
+                });
+
             modelBuilder.Entity("Model.Entities.Authentication.RoleClaim", b =>
                 {
                     b.HasOne("Model.Entities.Authentication.Role", "Role")
@@ -165,6 +487,116 @@ namespace Model.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Model.Entities.Log.Login", b =>
+                {
+                    b.HasOne("Model.Entities.Authentication.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Model.Entities.per_User.Activity", b =>
+                {
+                    b.HasOne("Model.Entities.per_User.Exercise", "Exercise")
+                        .WithMany("Activities")
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Exercise");
+                });
+
+            modelBuilder.Entity("Model.Entities.per_User.Exercise", b =>
+                {
+                    b.HasOne("Model.Entities.Assets.MachineAsset", "MachineAsset")
+                        .WithMany()
+                        .HasForeignKey("MachineAssetId");
+
+                    b.HasOne("Model.Entities.Authentication.User", "User")
+                        .WithMany("Exercises")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MachineAsset");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Model.Entities.per_User.ExerciseMuscleAsset", b =>
+                {
+                    b.HasOne("Model.Entities.per_User.Exercise", "Exercise")
+                        .WithMany("ExerciseMuscleAssets")
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Model.Entities.Assets.MuscleAsset", "MuscleAsset")
+                        .WithMany()
+                        .HasForeignKey("MuscleAssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Exercise");
+
+                    b.Navigation("MuscleAsset");
+                });
+
+            modelBuilder.Entity("Model.Entities.per_User.Workout", b =>
+                {
+                    b.HasOne("Model.Entities.Authentication.User", "User")
+                        .WithMany("Workouts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Model.Entities.per_User.WorkoutExercise", b =>
+                {
+                    b.HasOne("Model.Entities.per_User.Exercise", "Exercise")
+                        .WithMany("WorkoutExercises")
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Model.Entities.per_User.Workout", "Workout")
+                        .WithMany("WorkoutExercises")
+                        .HasForeignKey("WorkoutId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Exercise");
+
+                    b.Navigation("Workout");
+                });
+
+            modelBuilder.Entity("Model.Entities.Assets.ExerciseAsset", b =>
+                {
+                    b.Navigation("ExerciseAssetMuscleAssets");
+
+                    b.Navigation("WorkoutAssetExerciseAssets");
+                });
+
+            modelBuilder.Entity("Model.Entities.Assets.MachineAsset", b =>
+                {
+                    b.Navigation("ExerciseAssets");
+                });
+
+            modelBuilder.Entity("Model.Entities.Assets.MuscleAsset", b =>
+                {
+                    b.Navigation("ExerciseAssetMuscleAssets");
+                });
+
+            modelBuilder.Entity("Model.Entities.Assets.WorkoutAsset", b =>
+                {
+                    b.Navigation("WorkoutAssetExerciseAssets");
+                });
+
             modelBuilder.Entity("Model.Entities.Authentication.Role", b =>
                 {
                     b.Navigation("RoleClaims");
@@ -172,7 +604,25 @@ namespace Model.Migrations
 
             modelBuilder.Entity("Model.Entities.Authentication.User", b =>
                 {
+                    b.Navigation("Exercises");
+
                     b.Navigation("RoleClaims");
+
+                    b.Navigation("Workouts");
+                });
+
+            modelBuilder.Entity("Model.Entities.per_User.Exercise", b =>
+                {
+                    b.Navigation("Activities");
+
+                    b.Navigation("ExerciseMuscleAssets");
+
+                    b.Navigation("WorkoutExercises");
+                });
+
+            modelBuilder.Entity("Model.Entities.per_User.Workout", b =>
+                {
+                    b.Navigation("WorkoutExercises");
                 });
 #pragma warning restore 612, 618
         }

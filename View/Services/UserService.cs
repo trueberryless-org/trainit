@@ -6,13 +6,15 @@ public class UserService {
     private readonly CustomAuthStateProvider _authenticationStateProvider;
 
     private readonly IUserRepository _userRepository;
+    private readonly ILoginRepository _loginRepository;
 
-    public UserService(AuthenticationStateProvider authenticationStateProvider, IUserRepository userRepository) {
+    public UserService(AuthenticationStateProvider authenticationStateProvider, IUserRepository userRepository, ILoginRepository loginRepository) {
         _authenticationStateProvider = authenticationStateProvider
                                            as CustomAuthStateProvider ??
                                        throw new NullReferenceException(
                                            "I Guess you forgot to add the CustomAuthStateProvider to the Dependency Injection container");
         _userRepository = userRepository;
+        _loginRepository = loginRepository;
     }
 
     public User? CurrentUser => _authenticationStateProvider.CurrentUser;
@@ -44,7 +46,7 @@ public class UserService {
         var user = await _userRepository.AuthorizeAsync(loginModel, ct);
         if (user is null)
             throw new LoginException();
-
+        
         await _authenticationStateProvider.Login(user);
     }
 

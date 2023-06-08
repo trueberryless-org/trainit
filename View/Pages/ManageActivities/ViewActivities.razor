@@ -20,10 +20,17 @@
                     </MudDatePicker>
                     <MudIconButton OnClick="DateManager.NextDate" Icon="@Icons.Material.Filled.ArrowForwardIos" Disabled="DateManager.MaxDateReached" aria-label="next day"></MudIconButton>
                 </MudCardActions>
+                
+                <MudTextField @bind-Value="SearchQuery" Variant="Variant.Outlined"
+                              Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Tertiary"
+                              Immediate="true" Clearable="true" Placeholder="Search query"
+                              OnKeyUp="FilterActivities" OnClearButtonClick="FilterActivities"/>
+                
                 <MudDivider/>
             </MudStack>
 
-            <DataInit Data="Activities">
+
+            <DataInit Data="FilteredActivities">
                 <ChildContent Context="activities">
                     <MudPaper Elevation="3" Style="margin-block: 1rem; padding: 1rem; border-radius: 30px;">
                         <MudGrid>
@@ -90,10 +97,15 @@
 </AuthorizeView>
 
 @code {
+
     [Parameter]
     public MainLayout? MainLayout { get; set; }
 
     List<Activity> Activities { get; set; }
+
+    List<Activity> FilteredActivities { get; set; }
+
+    public string? SearchQuery { get; set; }
 
     private async Task ReloadActivities()
     {
@@ -101,12 +113,18 @@
         if (DateManager.SelectedDate == null || !DateManager.SelectedDate.HasValue) return;
 
         Activities = await ActivityRepository.GetActivitiesByUserByDate(UserService.CurrentUser.Id, DateManager.SelectedDate.Value);
+        FilterActivities();
+        
         StateHasChanged();
+    }
 
-        Console.WriteLine("Activity - Reload Completed");
-        Console.WriteLine(DateManager.SelectedDate.Value);
-        Console.WriteLine(Activities.Count);
-        Console.WriteLine(string.Join(", ", Activities.Select(a => a.Exercise.Name)));
+    private void FilterActivities()
+    {
+        if (!string.IsNullOrEmpty(SearchQuery))
+            FilteredActivities = Activities.Where(a => FuzzySearch.IsSimilar(a.Exercise.Name, SearchQuery)).ToList();
+        else
+            FilteredActivities = Activities;
+        StateHasChanged();
     }
 
     private void EditActivity(int activityId)
@@ -126,8 +144,6 @@
         await ReloadActivities();
 
         EventProvider.RegisterSelectedDateChanged(new EventCallback(this, (Func<Task>)ReloadActivities));
-
-        Console.WriteLine("Activity");
     }
 
 

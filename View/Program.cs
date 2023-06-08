@@ -45,11 +45,12 @@ builder.Services.AddMudServices(config =>
 
 // Repositories
 builder.Services.AddScoped<ILogEntryRepository, LogEntryRepository>();
+builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 builder.Services.AddScoped<IRoleClaimRepository, RoleClaimRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-builder.Services.AddTransient<IActivityRepository, ActivityRepository>();
+builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 builder.Services.AddScoped<IExerciseAssetMuscleAssetRepository, ExerciseAssetMuscleAssetRepository>();
 builder.Services.AddScoped<IExerciseAssetRepository, ExerciseAssetRepository>();
 builder.Services.AddScoped<IExerciseMuscleAssetRepository, ExerciseMuscleAssetRepository>();
@@ -68,6 +69,7 @@ builder.Services.AddScoped<NavigationProvider>();
 builder.Services.AddScoped<DateManager>();
 builder.Services.AddScoped<ThemeProvider>();
 builder.Services.AddScoped<BrowserService>();
+builder.Services.AddScoped<FuzzySearch>();
 
 builder.Services.AddLogging(); // the default Logger
 
