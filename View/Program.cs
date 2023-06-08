@@ -99,8 +99,7 @@ using (var scope = app.Services.CreateScope())
     try
     {
         context.Database.EnsureCreated();
-        if (context.Database.GetPendingMigrations().Any())
-            context.Database.Migrate();
+        context.Database.Migrate();
     }
     catch
     {
