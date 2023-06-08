@@ -97,6 +97,7 @@ using (var scope = app.Services.CreateScope())
     var context = services.GetRequiredService<ModelDbContext>();
 
     context.Database.EnsureCreated();
+    context.Database.Migrate();
 }
 
 app.UseHttpsRedirection();
