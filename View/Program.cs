@@ -98,24 +98,7 @@ using (var scope = app.Services.CreateScope())
 
     var context = services.GetRequiredService<ModelDbContext>();
 
-    try
-    {
-        context.Database.EnsureCreated();
-        if (context.Database.GetPendingMigrations().Any())
-        {
-            context.Database.Migrate();
-        }
-        else
-        {
-            // Create a new migration
-            var migrator = context.Database.GetService<IMigrator>();
-            migrator.Migrate();
-        }
-    }
-    catch
-    {
-        // ignored
-    }
+    context.Database.Migrate();
 }
 
 app.UseHttpsRedirection();
