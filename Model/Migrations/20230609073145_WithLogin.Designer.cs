@@ -11,8 +11,8 @@ using Model.Configuration;
 namespace Model.Migrations
 {
     [DbContext(typeof(ModelDbContext))]
-    [Migration("20230608135824_InitialCommit")]
-    partial class InitialCommit
+    [Migration("20230609073145_WithLogin")]
+    partial class WithLogin
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
