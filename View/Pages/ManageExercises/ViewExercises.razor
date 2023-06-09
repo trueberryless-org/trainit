@@ -93,7 +93,10 @@
     private void FilterExercises()
     {
         if (!string.IsNullOrEmpty(SearchQuery))
-            FilteredExercises = Exercises.Where(e => FuzzySearch.IsSimilar(e.Name, SearchQuery)).ToList();
+            FilteredExercises = Exercises.Where(e => 
+                FuzzySearch.IsSimilar(e.Name, SearchQuery) || 
+                (e.Description != null &&
+                 FuzzySearch.IsSimilar(e.Description, SearchQuery))).ToList();
         else
             FilteredExercises = Exercises;
         StateHasChanged();

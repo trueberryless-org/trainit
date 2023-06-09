@@ -20,12 +20,12 @@
                     </MudDatePicker>
                     <MudIconButton OnClick="DateManager.NextDate" Icon="@Icons.Material.Filled.ArrowForwardIos" Disabled="DateManager.MaxDateReached" aria-label="next day"></MudIconButton>
                 </MudCardActions>
-                
+
                 <MudTextField @bind-Value="SearchQuery" Variant="Variant.Outlined"
                               Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Tertiary"
                               Immediate="true" Clearable="true" Placeholder="Search query"
                               OnKeyUp="FilterActivities" OnClearButtonClick="FilterActivities"/>
-                
+
                 <MudDivider/>
             </MudStack>
 
@@ -38,7 +38,7 @@
                                 <h3 class="ms-4">@activities.Count Entries</h3>
                             </MudItem>
                             <MudItem xs="8" Style="display: flex; align-items: center; justify-content: end">
-                                <MudIconButton OnClick="ExpandAll" Icon="@Icons.Material.Rounded.ArrowDropDownCircle" Color="Color.Secondary" aria-label="expand all" Class="expand-all-button"></MudIconButton>
+                                <MudIconButton OnClick="ExpandAll" Icon="@Icons.Material.Rounded.ArrowDropDownCircle" Color="Color.Tertiary" aria-label="expand all" Class="expand-all-button"></MudIconButton>
                             </MudItem>
                         </MudGrid>
                     </MudPaper>
@@ -48,24 +48,37 @@
                             <MudExpansionPanel Class="expansion-list-item">
                                 <TitleContent>
                                     <MudGrid>
-                                        <MudItem xs="12" Style="display: flex; align-items: center;">
+                                        <MudItem xs="10" Style="display: flex; align-items: center;">
                                             @activity.Exercise.Name
+                                        </MudItem>
+                                        <MudItem xs="2" Style="display: flex; align-items: center; justify-content: end">
+                                            <MudIconButton Icon="@Icons.Filled.Edit" Color="Color.Secondary" OnClick="() => EditActivity(activity.Id)"/>
                                         </MudItem>
                                     </MudGrid>
                                 </TitleContent>
                                 <ChildContent>
                                     <MudGrid>
-                                        <MudItem xs="3" Style="display: flex; align-items: center;">
-                                            @Math.Round(activity.Weight, 2) kg
+                                        <MudItem xs="5" Style="display: flex; align-items: center; justify-content: start">
+                                            <MudTimeline TimelineOrientation="TimelineOrientation.Vertical" TimelinePosition="TimelinePosition.Left">
+                                                <MudTimelineItem Color="Color.Warning">
+                                                    <MudText Typo="Typo.button">Weight</MudText>
+                                                    <MudText Typo="Typo.body2" Class="mud-text-secondary">@Math.Round(activity.Weight, 2) kg</MudText>
+                                                </MudTimelineItem>
+                                                <MudTimelineItem Color="Color.Success">
+                                                    <MudText Typo="Typo.button">Sets</MudText>
+                                                    <MudText Typo="Typo.body2" Class="mud-text-secondary">@(activity.Set)</MudText>
+                                                </MudTimelineItem>
+                                                <MudTimelineItem Color="Color.Error">
+                                                    <MudText Typo="Typo.button">Repetitions</MudText>
+                                                    <MudText Typo="Typo.body2" Class="mud-text-secondary">@(activity.Repetition)</MudText>
+                                                </MudTimelineItem>
+                                            </MudTimeline>
                                         </MudItem>
-                                        <MudItem xs="3" Style="display: flex; align-items: center;">
-                                            @(activity.Set) Sets
-                                        </MudItem>
-                                        <MudItem xs="4" Style="display: flex; align-items: center;">
-                                            @(activity.Repetition) Repetitions
-                                        </MudItem>
-                                        <MudItem xs="2" Style="display: flex; align-items: center; justify-content: end">
-                                            <MudIconButton Icon="@Icons.Filled.Edit" Color="Color.Secondary" OnClick="() => EditActivity(activity.Id)"/>
+                                        <MudItem xs="7" Style="display: flex; align-items: center; justify-content: end">
+                                            @if (Series != null && XAxisLabels != null && Series.ContainsKey(activity.Id) && XAxisLabels.ContainsKey(activity.Id))
+                                            {
+                                                <MudChart ChartOptions="@_options" ChartType="ChartType.Line" ChartSeries="@Series[activity.Id]" @bind-SelectedIndex="Index" XAxisLabels="@XAxisLabels[activity.Id]" Width="100%" Height="100%"></MudChart>
+                                            }
                                         </MudItem>
                                     </MudGrid>
                                 </ChildContent>
@@ -97,6 +110,12 @@
 </AuthorizeView>
 
 @code {
+    private int Index = 1;
+    
+    private readonly ChartOptions _options = new();
+
+    public Dictionary<int, List<ChartSeries>> Series { get; set; }
+    public Dictionary<int, string[]> XAxisLabels { get; set; }
 
     [Parameter]
     public MainLayout? MainLayout { get; set; }
@@ -114,6 +133,27 @@
 
         Activities = await ActivityRepository.GetActivitiesByUserByDate(UserService.CurrentUser.Id, DateManager.SelectedDate.Value);
         FilterActivities();
+
+        Series = new Dictionary<int, List<ChartSeries>>();
+        XAxisLabels = new Dictionary<int, string[]>();
+
+        foreach (var activity in Activities)
+        {
+            var series = new List<double>();
+            var xAxisLabels = new List<string>();
+
+            var lastActivities = (await ActivityRepository.ReadAsync(a => a.ExerciseId == activity.ExerciseId)).ToList()
+                .OrderByDescending(a => a.DateValue).Take(6).OrderBy(a => a.DateValue);
+
+            series = lastActivities.Select(a => (double)(a.Weight * a.Set * a.Repetition)).ToList();
+            xAxisLabels = lastActivities.Select(a => a.DateValue.ToString("dd/MM")).ToList();
+            
+            Series.Add(activity.Id, new List<ChartSeries>()
+            {
+                new ChartSeries() { Name = "WEIGHT ⋅ SETS ⋅ REPS", Data = series.ToArray() },
+            });
+            XAxisLabels.Add(activity.Id, xAxisLabels.ToArray());
+        }
         
         StateHasChanged();
     }
@@ -121,7 +161,10 @@
     private void FilterActivities()
     {
         if (!string.IsNullOrEmpty(SearchQuery))
-            FilteredActivities = Activities.Where(a => FuzzySearch.IsSimilar(a.Exercise.Name, SearchQuery)).ToList();
+            FilteredActivities = Activities.Where(a =>
+                FuzzySearch.IsSimilar(a.Exercise.Name, SearchQuery) ||
+                (a.Exercise.Description != null &&
+                 FuzzySearch.IsSimilar(a.Exercise.Description, SearchQuery))).ToList();
         else
             FilteredActivities = Activities;
         StateHasChanged();
@@ -144,6 +187,13 @@
         await ReloadActivities();
 
         EventProvider.RegisterSelectedDateChanged(new EventCallback(this, (Func<Task>)ReloadActivities));
+
+        _options.YAxisTicks = 1;
+        _options.MaxNumYAxisTicks = 10;
+        _options.DisableLegend = false;
+        _options.LineStrokeWidth = 6.0;
+
+        StateHasChanged();
     }
 
 
@@ -172,6 +222,18 @@
 }
 
 <style>
+    .mud-chart-line {
+        overflow: visible !important;
+    }
+
+    .mud-chart text {
+        font-size: 24px;
+    }
+    
+    .mud-charts-xaxis {
+        transform: scaleX(0.9) translateX(40px);
+    }
+
     .expand-all-button {
         transition: transform 300ms ease-in-out;
     }
@@ -203,8 +265,7 @@
     
     .expansion-list-item.mud-panel-expanded {
         margin-block: .5rem !important;    
-    }
-           
+    }           
     
     .expansion-list-item:first-of-type.mud-panel-expanded {
         border-bottom-left-radius: 15px !important;
@@ -231,7 +292,7 @@
     }
     
     .mud-expand-panel-content {
-        padding: 0 1rem 1rem 1.5rem !important;
+        padding: 0 1rem 1rem 1rem !important;
     }
     
     .mud-expand-panel-header .mud-expand-panel-text {
@@ -244,12 +305,3 @@
         margin-top: .5rem;
     }
 </style>
-
-@if (!MultiExpand)
-{
-    <style>
-        .expansion-list-item.mud-panel-expanded {
-            border: 3px @(ThemeProvider.Theme.Palette.Secondary) solid;
-        }
-    </style>
-}
