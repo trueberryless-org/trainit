@@ -11,6 +11,16 @@
 
                 <MudForm>
                     <MudStack Spacing="4">
+                        <MudCardActions>
+                            <MudIconButton OnClick="DateManager.PrevDate" Icon="@Icons.Material.Filled.ArrowBackIos" aria-label="previous day"></MudIconButton>
+                            <MudDatePicker Label="Choose date" @ref="DateManager.DatePicker" @bind-Date="DateManager.SelectedDate" AutoClose="true" MaxDate="DateTime.Today" PickerVariant="PickerVariant.Dialog" class="mx-4">
+                                <PickerActions Context="_">
+                                    <MudButton Class="mr-auto align-self-start" OnClick="DateManager.DatePickerToday">Today</MudButton>
+                                </PickerActions>
+                            </MudDatePicker>
+                            <MudIconButton OnClick="DateManager.NextDate" Icon="@Icons.Material.Filled.ArrowForwardIos" Disabled="DateManager.MaxDateReached" aria-label="next day"></MudIconButton>
+                        </MudCardActions>
+
                         <MudPaper class="pa-4" Elevation="3">
                             <MudText>Type of Creation:</MudText>
                             <MudRadioGroup @bind-SelectedOption="@SelectedTypeOfAddition">
@@ -230,7 +240,7 @@
                     float weight = lastActivities.Find(la => la.ExerciseId == exercise.Id) == null ? default : lastActivities.Find(la => la.ExerciseId == exercise.Id).Weight;
                     int repetition = lastActivities.Find(la => la.ExerciseId == exercise.Id) == null ? default : lastActivities.Find(la => la.ExerciseId == exercise.Id).Repetition;
                     int set = lastActivities.Find(la => la.ExerciseId == exercise.Id) == null ? default : lastActivities.Find(la => la.ExerciseId == exercise.Id).Set;
-                    
+
                     newActivities.Add(new Activity()
                     {
                         ExerciseId = exercise.Id,
@@ -252,13 +262,13 @@
 
                 var lastActivities2 = await ActivityRepository.GetLastActivitiesByExercises(Exercises.Select(exercise => exercise.Id).ToList());
                 var newActivities2 = new List<Activity>();
-                
+
                 foreach (var exercise in Exercises)
                 {
                     float weight = lastActivities2.Find(la => la.ExerciseId == exercise.Id) == null ? default : lastActivities2.Find(la => la.ExerciseId == exercise.Id).Weight;
                     int repetition = lastActivities2.Find(la => la.ExerciseId == exercise.Id) == null ? 10 : lastActivities2.Find(la => la.ExerciseId == exercise.Id).Repetition;
                     int set = lastActivities2.Find(la => la.ExerciseId == exercise.Id) == null ? 3 : lastActivities2.Find(la => la.ExerciseId == exercise.Id).Set;
-                    
+
                     newActivities2.Add(new Activity()
                     {
                         ExerciseId = exercise.Id,

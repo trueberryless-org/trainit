@@ -58,7 +58,7 @@
                                 </TitleContent>
                                 <ChildContent>
                                     <MudGrid>
-                                        <MudItem xs="5" Style="display: flex; align-items: center; justify-content: start">
+                                        <MudItem xs="6" Style="display: flex; align-items: center; justify-content: start">
                                             <MudTimeline TimelineOrientation="TimelineOrientation.Vertical" TimelinePosition="TimelinePosition.Left">
                                                 <MudTimelineItem Color="Color.Warning">
                                                     <MudText Typo="Typo.button">Weight</MudText>
@@ -74,7 +74,7 @@
                                                 </MudTimelineItem>
                                             </MudTimeline>
                                         </MudItem>
-                                        <MudItem xs="7" Style="display: flex; align-items: center; justify-content: end">
+                                        <MudItem xs="6" Style="display: flex; align-items: center; justify-content: end">
                                             @if (Series != null && XAxisLabels != null && Series.ContainsKey(activity.Id) && XAxisLabels.ContainsKey(activity.Id))
                                             {
                                                 <MudChart ChartOptions="@_options" ChartType="ChartType.Line" ChartSeries="@Series[activity.Id]" @bind-SelectedIndex="Index" XAxisLabels="@XAxisLabels[activity.Id]" Width="100%" Height="100%"></MudChart>
